@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CronetSharp", "CronetSharp\CronetSharp.csproj", "{38C676C1-4E48-4B92-95E0-D406CEFDBE40}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CronetSharp.Example", "CronetSharp.Example\CronetSharp.Example.csproj", "{1C882A13-5B2B-4C73-ACB1-E8DCB5E8447D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{38C676C1-4E48-4B92-95E0-D406CEFDBE40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38C676C1-4E48-4B92-95E0-D406CEFDBE40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38C676C1-4E48-4B92-95E0-D406CEFDBE40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38C676C1-4E48-4B92-95E0-D406CEFDBE40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C882A13-5B2B-4C73-ACB1-E8DCB5E8447D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C882A13-5B2B-4C73-ACB1-E8DCB5E8447D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C882A13-5B2B-4C73-ACB1-E8DCB5E8447D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C882A13-5B2B-4C73-ACB1-E8DCB5E8447D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
