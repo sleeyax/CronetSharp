@@ -1,12 +1,16 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using CronetSharp.Wrapper;
 
 namespace CronetSharp
 {
     public class CronetEngine
     {
-        [DllImport(@"D:\Documents\Programming\chromium\src\out\Debug\CronetSharp.89.0.4378.0.dll")]
-        private static extern void Cronet_Engine_Create();
+        private readonly IntPtr _enginePtr;
         
-        
+        public CronetEngine()
+        {
+            _enginePtr = Cronet.Engine.Cronet_Engine_Create();
+            Console.WriteLine(_enginePtr);
+        }
     }
 }

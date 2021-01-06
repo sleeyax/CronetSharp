@@ -4,5 +4,15 @@
         <TargetFramework>netstandard2.0</TargetFramework>
         <RootNamespace>CronetSharp</RootNamespace>
     </PropertyGroup>
+    
+    <ItemGroup>
+      <Content Include="CronetAsm\Win32\cronet.dll">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <Content Include="CronetAsm\Win64\cronet.dll">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="cronet64.dll" />
+    </ItemGroup>
 
 </Project>

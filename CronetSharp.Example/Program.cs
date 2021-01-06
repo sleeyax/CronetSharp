@@ -1,5 +1,6 @@
 ﻿using System;
 using CronetSharp;
+using CronetSharp.CronetAsm;
 
 namespace example
 {
@@ -7,8 +8,10 @@ namespace example
     {
         static void Main(string[] args)
         {
+            CronetLoader.Load();
             
-            
+            var engine = new CronetEngine();
+
             Console.ReadKey();
         }
     }
