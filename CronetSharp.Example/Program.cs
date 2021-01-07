@@ -17,7 +17,10 @@ namespace example
             var engineParams = GetEngineParams();
             Console.WriteLine($"HTTP2 enabled: {engineParams.Http2Enabled}");
             var engine = new CronetEngine(engineParams);
+            engineParams.UserAgent = "cronet/cs";
             Console.WriteLine($"Engine version: {engine.Version}");
+            Console.WriteLine($"Default UA: {engine.DefaultUserAgent}");
+            Console.WriteLine($"Current UA: {engineParams.UserAgent}");
         }
 
         private static CronetEngine BuildEngine()

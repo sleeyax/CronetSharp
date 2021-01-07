@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using CronetSharp.Cronet.Marshalers;
 using CronetSharp.CronetAsm;
 
 namespace CronetSharp.Cronet
@@ -13,6 +14,7 @@ namespace CronetSharp.Cronet
         internal static extern void Cronet_EngineParams_Destroy(IntPtr engineParamsPtr);
         
         [DllImport(CronetLoader.Dll)]
+        [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(StringMarshaler))]
         internal static extern string Cronet_EngineParams_accept_language_get(IntPtr engineParamsPtr);
         
         [DllImport(CronetLoader.Dll)]
@@ -47,6 +49,7 @@ namespace CronetSharp.Cronet
         internal static extern void Cronet_EngineParams_enable_quic_set(IntPtr engineParamsPtr, bool enableQuic);
         
         [DllImport(CronetLoader.Dll)]
+        [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(StringMarshaler))]
         internal static extern string Cronet_EngineParams_experimental_options_get(IntPtr engineParamsPtr);
         
         [DllImport(CronetLoader.Dll)]
@@ -102,16 +105,17 @@ namespace CronetSharp.Cronet
         internal static extern uint Cronet_EngineParams_quic_hints_size(IntPtr engineParamsPtr);
         
         [DllImport(CronetLoader.Dll)]
+        [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(StringMarshaler))]
         internal static extern string Cronet_EngineParams_storage_path_get(IntPtr engineParamsPtr);
 
         [DllImport(CronetLoader.Dll)]
         internal static extern void Cronet_EngineParams_storage_path_set(IntPtr engineParamsPtr, string storagePath);
         
         [DllImport(CronetLoader.Dll)]
+        [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(StringMarshaler))]
         internal static extern string Cronet_EngineParams_user_agent_get(IntPtr engineParamsPtr);
         
         [DllImport(CronetLoader.Dll)]
         internal static extern void Cronet_EngineParams_user_agent_set(IntPtr engineParamsPtr, string userAgent);
-
     }
 }

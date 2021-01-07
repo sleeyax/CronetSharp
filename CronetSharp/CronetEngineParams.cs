@@ -10,6 +10,14 @@ namespace CronetSharp
         {
             Pointer = Cronet.EngineParams.Cronet_EngineParams_Create();
         }
+        
+        /// <summary>
+        /// Destroy the CronetEngineParams and free up memory.
+        /// </summary>
+        public void Destroy()
+        {
+            Cronet.EngineParams.Cronet_EngineParams_Destroy(Pointer);
+        }
 
         /// <summary>
         /// Sets whether Brotli compression is enabled.
@@ -75,12 +83,21 @@ namespace CronetSharp
         }
         
         /// <summary>
-        /// Constructs a User-Agent string including application name and version, system build version, model and id, and Cronet version.
+        /// Sets the user agent header
         /// </summary>
         public string UserAgent
         {
             get => Cronet.EngineParams.Cronet_EngineParams_user_agent_get(Pointer);
             set => Cronet.EngineParams.Cronet_EngineParams_user_agent_set(Pointer, value);
+        }
+        
+        /// <summary>
+        /// Sets the accept-language header
+        /// </summary>
+        public string AcceptLanguage
+        {
+            get => Cronet.EngineParams.Cronet_EngineParams_accept_language_get(Pointer);
+            set => Cronet.EngineParams.Cronet_EngineParams_accept_language_set(Pointer, value);
         }
     }
 }

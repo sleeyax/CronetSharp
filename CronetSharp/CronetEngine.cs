@@ -33,6 +33,14 @@ namespace CronetSharp
         {
             Cronet.Engine.Cronet_Engine_Shutdown(_enginePtr);
         }
+        
+        /// <summary>
+        /// Destroy the CronetEngine and free up memory.
+        /// </summary>
+        public void Destroy()
+        {
+            Cronet.Engine.Cronet_Engine_Destroy(_enginePtr);
+        }
 
         /// <summary>
         /// Starts NetLog logging to a file. The NetLog will contain events emitted by all live CronetEngines.
@@ -56,6 +64,8 @@ namespace CronetSharp
         }
         
         public string Version => Cronet.Engine.Cronet_Engine_GetVersionString(_enginePtr);
+        
+        public string DefaultUserAgent => Cronet.Engine.Cronet_Engine_GetDefaultUserAgent(_enginePtr);
 
         public class Builder
         {
@@ -172,6 +182,19 @@ namespace CronetSharp
             public Builder SetUserAgent(string userAgent)
             {
                 _engineParams.UserAgent = userAgent;
+                return this;
+            }
+
+            /// <summary>
+            /// Overrides the Accept-Language header for all requests.
+            /// An explicitly set Accept-Language header (set using addHeader(String, String)) will override a value set using this function.
+            /// </summary>
+            /// <param name="userAgent">the accept-language string to use for all requests.</param>
+            /// <param name="acceptLanguage"></param>
+            /// <returns></returns>
+            public Builder SetAcceptLanguage(string acceptLanguage)
+            {
+                _engineParams.AcceptLanguage = acceptLanguage;
                 return this;
             }
         }

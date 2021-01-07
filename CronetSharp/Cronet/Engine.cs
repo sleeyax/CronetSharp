@@ -29,8 +29,9 @@ namespace CronetSharp.Cronet
         internal static extern IntPtr Cronet_Engine_GetClientContext(IntPtr enginePtr);
 
         [DllImport(CronetLoader.Dll)]
+        [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(StringMarshaler))]
         internal static extern string Cronet_Engine_GetDefaultUserAgent(IntPtr enginePtr);
-            
+        
         [DllImport(CronetLoader.Dll)]
         internal static extern IntPtr Cronet_Engine_GetStreamEngine(IntPtr enginePtr);
 
