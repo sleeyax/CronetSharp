@@ -8,11 +8,29 @@ namespace example
     {
         static void Main(string[] args)
         {
-            CronetLoader.Load();
-            
-            var engine = new CronetEngine();
-
+            var engine = BuildEngine();
+            Console.WriteLine($"Engine version: {engine.Version}");
             Console.ReadKey();
+        }
+
+        private static CronetEngine BuildEngine()
+        {
+            return new CronetEngine.Builder()
+                .EnableHttp2(true)
+                .EnableHttpCache(HttpCacheMode.InMemory, 3000000)
+                .SetDllLoader(new CronetLoader())
+                .Build();
+        }
+
+        private static CronetEngineParams GetEngineParams()
+        {
+            return new CronetEngineParams
+            {
+                Http2Enabled = true,
+                HttpCacheMode = HttpCacheMode.InMemory,
+                HttpCacheSize = 3000000,
+                DllLoader = new CronetLoader(),
+            };
         }
     }
 }
