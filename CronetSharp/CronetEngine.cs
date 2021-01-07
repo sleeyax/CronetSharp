@@ -22,7 +22,6 @@ namespace CronetSharp
 
         public CronetEngine(CronetEngineParams engineParams)
         {
-            engineParams.DllLoader.Load();
             _enginePtr = Cronet.Engine.Cronet_Engine_Create();
             _engineParamsPtr = engineParams.Pointer;
         }
@@ -67,7 +66,6 @@ namespace CronetSharp
         public class Builder
         {
             private readonly IntPtr _engineParamsPtr;
-            private ILoader _dllLoader;
 
             /// <summary>
             /// A builder for CronetEngines, which allows runtime configuration of CronetEngine.
@@ -76,12 +74,10 @@ namespace CronetSharp
             public Builder()
             {
                 _engineParamsPtr = Cronet.EngineParams.Cronet_EngineParams_Create();
-                _dllLoader = new CronetLoader();
             }
 
             public CronetEngine Build()
             {
-                _dllLoader.Load();
                 return new CronetEngine(_engineParamsPtr);
             }
 
@@ -150,18 +146,6 @@ namespace CronetSharp
             public Builder EnableQuic(bool enableQuic)
             {
                 Cronet.EngineParams.Cronet_EngineParams_enable_quic_set(_engineParamsPtr, enableQuic);
-                return this;
-            }
-
-            /// <summary>
-            /// Sets a DLL loader to be used to load the native library.
-            /// If not set, the default library loader will be used.
-            /// </summary>
-            /// <param name="loader">Loader to be used to load the native library.</param>
-            /// <returns></returns>
-            public Builder SetDllLoader(ILoader loader)
-            {
-                if (loader != null) _dllLoader = loader;
                 return this;
             }
 

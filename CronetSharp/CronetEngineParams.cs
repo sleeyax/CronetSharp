@@ -1,39 +1,16 @@
 ﻿using System;
-using System.Drawing;
-using CronetSharp.CronetAsm;
 
 namespace CronetSharp
 {
     public class CronetEngineParams
     {
         public IntPtr Pointer { get; }
-
-        private ILoader _dllLoader;
-
+        
         public CronetEngineParams()
         {
             Pointer = Cronet.EngineParams.Cronet_EngineParams_Create();
-            _dllLoader = new CronetLoader();
-        }
-        
-        public CronetEngineParams(ILoader dllLoader)
-        {
-            Pointer = Cronet.EngineParams.Cronet_EngineParams_Create();
-            _dllLoader = dllLoader;
         }
 
-        /// <summary>
-        /// Sets a CronetEngine.Builder.LibraryLoader to be used to load the native library.
-        /// </summary>
-        public ILoader DllLoader
-        {
-            get => _dllLoader;
-            set {
-                if (value != null)
-                    _dllLoader = value;
-            }
-        }
-        
         /// <summary>
         /// Sets whether Brotli compression is enabled.
         /// </summary>

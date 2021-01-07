@@ -19,24 +19,28 @@ namespace CronetSharp.Cronet
         internal static extern void Cronet_EngineParams_accept_language_set(IntPtr engineParamsPtr, string acceptLanguage);
         
         [DllImport(CronetLoader.Dll)]
+        [return: MarshalAs(UnmanagedType.U1)]
         internal static extern bool Cronet_EngineParams_enable_brotli_get(IntPtr engineParamsPtr);
 
         [DllImport(CronetLoader.Dll)]
         internal static extern void Cronet_EngineParams_enable_brotli_set(IntPtr engineParamsPtr, bool enableBrotli);
         
         [DllImport(CronetLoader.Dll)]
+        [return: MarshalAs(UnmanagedType.U1)]
         internal static extern bool Cronet_EngineParams_enable_check_result_get(IntPtr engineParamsPtr);
         
         [DllImport(CronetLoader.Dll)]
         internal static extern void Cronet_EngineParams_enable_check_result_set(IntPtr engineParamsPtr, bool enableCheckResult);
 
         [DllImport(CronetLoader.Dll)]
+        [return: MarshalAs(UnmanagedType.U1)]
         internal static extern bool Cronet_EngineParams_enable_http2_get(IntPtr engineParamsPtr);
         
         [DllImport(CronetLoader.Dll)]
         internal static extern void Cronet_EngineParams_enable_http2_set(IntPtr engineParamsPtr, bool enableHttp2);
 
         [DllImport(CronetLoader.Dll)]
+        [return: MarshalAs(UnmanagedType.U1)]
         internal static extern bool Cronet_EngineParams_enable_quic_get(IntPtr engineParamsPtr);
         
         [DllImport(CronetLoader.Dll)]
@@ -67,6 +71,7 @@ namespace CronetSharp.Cronet
         internal static extern void Cronet_EngineParams_network_thread_priority_set(IntPtr engineParamsPtr, double threadPriority);
         
         [DllImport(CronetLoader.Dll)]
+        [return: MarshalAs(UnmanagedType.U1)]
         internal static extern bool Cronet_EngineParams_enable_public_key_pinning_bypass_for_local_trust_anchors_get(IntPtr engineParamsPtr);
         
         [DllImport(CronetLoader.Dll)]
