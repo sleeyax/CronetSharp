@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Text;
 using CronetSharp.CronetAsm;
 
 namespace CronetSharp.Cronet
@@ -34,12 +35,13 @@ namespace CronetSharp.Cronet
         internal static extern IntPtr Cronet_Engine_GetStreamEngine(IntPtr enginePtr);
             
         [DllImport(CronetLoader.Dll)]
-        internal static extern string Cronet_Engine_GetVersionString(IntPtr enginePtr);
+        internal static extern IntPtr Cronet_Engine_GetVersionString(IntPtr enginePtr);
 
         [DllImport(CronetLoader.Dll)]
         internal static extern void Cronet_Engine_SetClientContext(IntPtr enginePtr, IntPtr clientContext);
             
         [DllImport(CronetLoader.Dll)]
+        [return: MarshalAs(UnmanagedType.U1)]
         internal static extern bool Cronet_Engine_StartNetLogToFile(IntPtr enginePtr, string fileName, bool logAll);
 
         [DllImport(CronetLoader.Dll)]

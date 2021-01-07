@@ -1,5 +1,5 @@
 ﻿using System;
-using CronetSharp.CronetAsm;
+using System.Runtime.InteropServices;
 
 namespace CronetSharp
 {
@@ -12,12 +12,6 @@ namespace CronetSharp
         {
             _enginePtr = Cronet.Engine.Cronet_Engine_Create();
             _engineParamsPtr = Cronet.EngineParams.Cronet_EngineParams_Create();
-        }
-
-        public CronetEngine(IntPtr engineParamsPtr)
-        {
-            _enginePtr = Cronet.Engine.Cronet_Engine_Create();
-            _engineParamsPtr = engineParamsPtr;
         }
 
         public CronetEngine(CronetEngineParams engineParams)
@@ -61,11 +55,11 @@ namespace CronetSharp
             Cronet.Engine.Cronet_Engine_StopNetLog(_enginePtr);
         }
         
-        public string Version => Cronet.Engine.Cronet_Engine_GetVersionString(_enginePtr);
+        public string Version => Marshal.PtrToStringAnsi(Cronet.Engine.Cronet_Engine_GetVersionString(_enginePtr));
 
         public class Builder
         {
-            private readonly IntPtr _engineParamsPtr;
+            private readonly CronetEngineParams _engineParams;
 
             /// <summary>
             /// A builder for CronetEngines, which allows runtime configuration of CronetEngine.
@@ -73,12 +67,17 @@ namespace CronetSharp
             /// </summary>
             public Builder()
             {
-                _engineParamsPtr = Cronet.EngineParams.Cronet_EngineParams_Create();
+                _engineParams = new CronetEngineParams();
             }
 
             public CronetEngine Build()
             {
-                return new CronetEngine(_engineParamsPtr);
+                return new CronetEngine(_engineParams);
+            }
+
+            public CronetEngineParams GetParams()
+            {
+                return _engineParams;
             }
 
             // TODO: public key pins
@@ -93,7 +92,7 @@ namespace CronetSharp
             /// <returns></returns>
             public Builder EnableBrotli(bool enableBrotli)
             {
-                Cronet.EngineParams.Cronet_EngineParams_enable_brotli_set(_engineParamsPtr, enableBrotli);
+                _engineParams.BrotliEnabled = enableBrotli;
                 return this;
             }
 
@@ -105,7 +104,7 @@ namespace CronetSharp
             /// <returns></returns>
             public Builder EnableHttp2(bool enableHttp2)
             {
-                Cronet.EngineParams.Cronet_EngineParams_enable_http2_set(_engineParamsPtr, enableHttp2);
+                _engineParams.Http2Enabled = enableHttp2;
                 return this;
             }
             
@@ -117,8 +116,8 @@ namespace CronetSharp
             /// <returns></returns>
             public Builder EnableHttpCache(HttpCacheMode httpCacheMode, long maxSize)
             {
-                Cronet.EngineParams.Cronet_EngineParams_http_cache_mode_set(_engineParamsPtr, httpCacheMode);
-                Cronet.EngineParams.Cronet_EngineParams_http_cache_max_size_set(_engineParamsPtr, maxSize);
+                _engineParams.HttpCacheMode = httpCacheMode;
+                _engineParams.HttpCacheSize = maxSize;
                 return this;
             }
 
@@ -133,7 +132,7 @@ namespace CronetSharp
             /// <returns></returns>
             public Builder EnablePublicKeyPinningBypassForLocalTrustAnchors(bool enablePublicKeyPinningBypassForLocalTrustAnchors)
             {
-                Cronet.EngineParams.Cronet_EngineParams_enable_public_key_pinning_bypass_for_local_trust_anchors_set(_engineParamsPtr, enablePublicKeyPinningBypassForLocalTrustAnchors);
+                _engineParams.PublicKeyPinningBypassForLocalTrustAnchors = enablePublicKeyPinningBypassForLocalTrustAnchors;
                 return this;
             }
 
@@ -145,7 +144,7 @@ namespace CronetSharp
             /// <returns></returns>
             public Builder EnableQuic(bool enableQuic)
             {
-                Cronet.EngineParams.Cronet_EngineParams_enable_quic_set(_engineParamsPtr, enableQuic);
+                _engineParams.Quic = enableQuic;
                 return this;
             }
 
@@ -160,7 +159,7 @@ namespace CronetSharp
             /// <returns></returns>
             public Builder SetStoragePath(string storagePath)
             {
-                Cronet.EngineParams.Cronet_EngineParams_storage_path_set(_engineParamsPtr, storagePath);
+                _engineParams.StoragePath = storagePath;
                 return this;
             }
             
@@ -172,7 +171,7 @@ namespace CronetSharp
             /// <returns></returns>
             public Builder SetUserAgent(string userAgent)
             {
-                Cronet.EngineParams.Cronet_EngineParams_user_agent_set(_engineParamsPtr, userAgent);
+                _engineParams.UserAgent = userAgent;
                 return this;
             }
         }

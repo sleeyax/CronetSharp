@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using CronetSharp;
 using CronetSharp.CronetAsm;
 
@@ -8,28 +9,33 @@ namespace example
     {
         static void Main(string[] args)
         {
-            var engine = BuildEngine();
+            // load dll
+            ILoader loader = new CronetLoader();
+            loader.Load();
+
+            // create engine
+            var engineParams = GetEngineParams();
+            Console.WriteLine($"HTTP2 enabled: {engineParams.Http2Enabled}");
+            var engine = new CronetEngine(engineParams);
             Console.WriteLine($"Engine version: {engine.Version}");
-            Console.ReadKey();
         }
 
         private static CronetEngine BuildEngine()
         {
-            return new CronetEngine.Builder()
-                .EnableHttp2(true)
-                .EnableHttpCache(HttpCacheMode.InMemory, 3000000)
-                .SetDllLoader(new CronetLoader())
-                .Build();
+            var builder = new CronetEngine.Builder()
+                .EnableHttp2(false);
+            var parameters = builder.GetParams();
+            Console.WriteLine($"HTTP2 enabled: {parameters.Http2Enabled}");
+            return builder.Build();
         }
 
         private static CronetEngineParams GetEngineParams()
         {
             return new CronetEngineParams
             {
-                Http2Enabled = true,
+                Http2Enabled = false,
                 HttpCacheMode = HttpCacheMode.InMemory,
                 HttpCacheSize = 3000000,
-                DllLoader = new CronetLoader(),
             };
         }
     }
