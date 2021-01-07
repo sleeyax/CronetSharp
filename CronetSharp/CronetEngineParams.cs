@@ -58,7 +58,7 @@ namespace CronetSharp
         /// <summary>
         /// Enables or disables public key pinning bypass for local trust anchors.
         /// </summary>
-        public bool PublicKeyPinningBypassForLocalTrustAnchors
+        public bool PublicKeyPinningBypassForLocalTrustAnchorsEnabled
         {
             get => Cronet.EngineParams.Cronet_EngineParams_enable_public_key_pinning_bypass_for_local_trust_anchors_get(Pointer);
             set => Cronet.EngineParams.Cronet_EngineParams_enable_public_key_pinning_bypass_for_local_trust_anchors_set(Pointer, value);
@@ -67,7 +67,7 @@ namespace CronetSharp
         /// <summary>
         /// Sets whether QUIC protocol is enabled.
         /// </summary>
-        public bool Quic
+        public bool QuicEnabled
         {
             get => Cronet.EngineParams.Cronet_EngineParams_enable_quic_get(Pointer);
             set => Cronet.EngineParams.Cronet_EngineParams_enable_quic_set(Pointer, value);

@@ -14,32 +14,23 @@ namespace example
             loader.Load();
 
             // create engine
-            var engineParams = GetEngineParams();
-            Console.WriteLine($"HTTP2 enabled: {engineParams.Http2Enabled}");
-            var engine = new CronetEngine(engineParams);
-            engineParams.UserAgent = "cronet/cs";
+            var engine = CreateEngine();
             Console.WriteLine($"Engine version: {engine.Version}");
-            Console.WriteLine($"Default UA: {engine.DefaultUserAgent}");
-            Console.WriteLine($"Current UA: {engineParams.UserAgent}");
+            
+            engine.Shutdown();
+            engine.Destroy();
         }
 
-        private static CronetEngine BuildEngine()
+        static CronetEngine CreateEngine()
         {
-            var builder = new CronetEngine.Builder()
-                .EnableHttp2(false);
-            var parameters = builder.GetParams();
-            Console.WriteLine($"HTTP2 enabled: {parameters.Http2Enabled}");
-            return builder.Build();
-        }
-
-        private static CronetEngineParams GetEngineParams()
-        {
-            return new CronetEngineParams
+            var engineParams  = new CronetEngineParams
             {
-                Http2Enabled = false,
-                HttpCacheMode = HttpCacheMode.InMemory,
-                HttpCacheSize = 3000000,
+                UserAgent = "CronetSample/1",
+                QuicEnabled = true,
             };
+            var engine = new CronetEngine(engineParams);
+            engineParams.Destroy();
+            return engine;
         }
     }
 }
