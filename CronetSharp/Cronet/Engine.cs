@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using System.Text;
+using CronetSharp.Cronet.Marshalers;
 using CronetSharp.CronetAsm;
 
 namespace CronetSharp.Cronet
@@ -33,9 +33,10 @@ namespace CronetSharp.Cronet
             
         [DllImport(CronetLoader.Dll)]
         internal static extern IntPtr Cronet_Engine_GetStreamEngine(IntPtr enginePtr);
-            
+
         [DllImport(CronetLoader.Dll)]
-        internal static extern IntPtr Cronet_Engine_GetVersionString(IntPtr enginePtr);
+        [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(StringMarshaler))]
+        internal static extern string Cronet_Engine_GetVersionString(IntPtr enginePtr);
 
         [DllImport(CronetLoader.Dll)]
         internal static extern void Cronet_Engine_SetClientContext(IntPtr enginePtr, IntPtr clientContext);

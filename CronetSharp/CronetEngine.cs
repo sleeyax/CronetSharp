@@ -55,7 +55,7 @@ namespace CronetSharp
             Cronet.Engine.Cronet_Engine_StopNetLog(_enginePtr);
         }
         
-        public string Version => Marshal.PtrToStringAnsi(Cronet.Engine.Cronet_Engine_GetVersionString(_enginePtr));
+        public string Version => Cronet.Engine.Cronet_Engine_GetVersionString(_enginePtr);
 
         public class Builder
         {
