@@ -14,10 +14,10 @@ namespace CronetSharp.Cronet
         internal static extern void Cronet_Engine_Destroy(IntPtr enginePtr);
 
         [DllImport(CronetLoader.Dll)]
-        internal static extern CronetEngineResult Cronet_Engine_Shutdown(IntPtr enginePtr);
+        internal static extern EngineResult Cronet_Engine_Shutdown(IntPtr enginePtr);
         
         [DllImport(CronetLoader.Dll)]
-        internal static extern CronetEngineResult Cronet_Engine_StartWithParams(IntPtr enginePtr, IntPtr engineParamsPtr);
+        internal static extern EngineResult Cronet_Engine_StartWithParams(IntPtr enginePtr, IntPtr engineParamsPtr);
             
         [DllImport(CronetLoader.Dll)]
         internal static extern void Cronet_Engine_AddRequestFinishedListener(IntPtr enginePtr, IntPtr requestFinishedListenerPtr, IntPtr executorPtr);

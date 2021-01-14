@@ -1,6 +1,6 @@
-﻿namespace CronetSharp
+﻿namespace CronetSharp.Cronet
 {
-    public enum CronetEngineResult {
+    public enum EngineResult {
       SUCCESS = 0,
       ILLEGAL_ARGUMENT = -100,
       ILLEGAL_ARGUMENT_STORAGE_PATH_MUST_EXIST = -101,

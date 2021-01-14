@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 
 namespace CronetSharp
 {
@@ -20,7 +19,7 @@ namespace CronetSharp
             _engineParamsPtr = engineParams.Pointer;
         }
 
-        public CronetEngineResult Start()
+        public Cronet.EngineResult Start()
         {
             return Cronet.Engine.Cronet_Engine_StartWithParams(_enginePtr, _engineParamsPtr);
         }
@@ -124,7 +123,7 @@ namespace CronetSharp
             /// <param name="httpCacheMode">control location and type of cached data.</param>
             /// <param name="maxSize">maximum size in bytes used to cache data (advisory and maybe exceeded at times).</param>
             /// <returns></returns>
-            public Builder EnableHttpCache(HttpCacheMode httpCacheMode, long maxSize)
+            public Builder EnableHttpCache(Cronet.HttpCacheMode httpCacheMode, long maxSize)
             {
                 _engineParams.HttpCacheMode = httpCacheMode;
                 _engineParams.HttpCacheSize = maxSize;
@@ -142,7 +141,7 @@ namespace CronetSharp
             /// <returns></returns>
             public Builder EnablePublicKeyPinningBypassForLocalTrustAnchors(bool enablePublicKeyPinningBypassForLocalTrustAnchors)
             {
-                _engineParams.PublicKeyPinningBypassForLocalTrustAnchors = enablePublicKeyPinningBypassForLocalTrustAnchors;
+                _engineParams.PublicKeyPinningBypassForLocalTrustAnchorsEnabled = enablePublicKeyPinningBypassForLocalTrustAnchors;
                 return this;
             }
 
@@ -154,7 +153,7 @@ namespace CronetSharp
             /// <returns></returns>
             public Builder EnableQuic(bool enableQuic)
             {
-                _engineParams.Quic = enableQuic;
+                _engineParams.QuicEnabled = enableQuic;
                 return this;
             }
 

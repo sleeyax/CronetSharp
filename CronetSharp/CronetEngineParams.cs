@@ -40,7 +40,7 @@ namespace CronetSharp
         /// <summary>
         /// Enables or disables caching of HTTP data and other information like QUIC server information.
         /// </summary>
-        public HttpCacheMode HttpCacheMode
+        public Cronet.HttpCacheMode HttpCacheMode
         {
             get => Cronet.EngineParams.Cronet_EngineParams_http_cache_mode_get(Pointer);
             set => Cronet.EngineParams.Cronet_EngineParams_http_cache_mode_set(Pointer, value);

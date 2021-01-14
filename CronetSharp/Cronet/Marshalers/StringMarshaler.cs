@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace CronetSharp.Cronet.Marshalers
 {
-    public class StringMarshaler : ICustomMarshaler
+    internal class StringMarshaler : ICustomMarshaler
     {
         public void CleanUpManagedData(object managedObj) {}
 

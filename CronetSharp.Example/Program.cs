@@ -17,6 +17,12 @@ namespace example
             var engine = CreateEngine();
             Console.WriteLine($"Engine version: {engine.Version}");
             
+            // create default executor
+            var executor = new CronetExecutor();
+            
+            // create request callback
+            
+            
             engine.Shutdown();
             engine.Destroy();
         }

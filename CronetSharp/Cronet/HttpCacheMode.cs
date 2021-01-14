@@ -1,4 +1,4 @@
-﻿namespace CronetSharp
+﻿namespace CronetSharp.Cronet
 {
     public enum HttpCacheMode
     {
