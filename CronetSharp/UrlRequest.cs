@@ -56,8 +56,17 @@ namespace CronetSharp
         {
             Cronet.UrlRequest.Cronet_UrlRequest_FollowRedirect(_urlRequestPtr);
         }
-        
-        // TODO: get getStatus(Listener)
+
+        /// <summary>
+        /// Attempts to read part of the response body into the provided buffer.
+        /// Must only be called at most once in response to each invocation of the onResponseStarted() and onReadCompleted() methods of the UrlRequest.Callback.
+        /// Each call will result in an asynchronous call to either the Callback's onReadCompleted() method if data is read, its onSucceeded() method if there's no more data to read, or its onFailed() method if there's an error.
+        /// </summary>
+        /// <param name="buffer"></param>
+        public void Read(ByteBuffer buffer)
+        {
+            Cronet.UrlRequest.Cronet_UrlRequest_Read(_urlRequestPtr, buffer.Pointer);
+        }
         // TODO: read(ByteBuffer buffer) 
         
         /// <summary>

@@ -31,7 +31,7 @@ namespace CronetSharp.Cronet
         
         [DllImport(CronetLoader.Dll)]
         internal static extern EngineResult Cronet_UrlRequest_Read(IntPtr urlRequestPtr, IntPtr bufferPtr);
-        
+
         [DllImport(CronetLoader.Dll)]
         internal static extern void Cronet_UrlRequest_Cancel(IntPtr urlRequestPtr);
         
@@ -40,8 +40,5 @@ namespace CronetSharp.Cronet
     
         [DllImport(CronetLoader.Dll)]
         internal static extern void Cronet_UrlRequest_GetStatus(IntPtr urlRequestPtr, IntPtr urlRequestStatusListenerPtr);
-        
-        
-        
     }
 }
