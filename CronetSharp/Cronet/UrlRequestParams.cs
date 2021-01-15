@@ -32,7 +32,7 @@ namespace CronetSharp.Cronet
         [DllImport(CronetLoader.Dll)]
         internal static extern void Cronet_UrlRequestParams_http_method_set(
             IntPtr urlRequestParamsPtr, 
-            [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(StringMarshaler))] string httpMethod
+            string httpMethod
         );
         
         [DllImport(CronetLoader.Dll)]
@@ -79,6 +79,7 @@ namespace CronetSharp.Cronet
         internal static extern void Cronet_UrlRequestParams_request_headers_clear(IntPtr urlRequestParamsPtr);
         
         [DllImport(CronetLoader.Dll)]
+        [return: MarshalAs(UnmanagedType.U1)]
         internal static extern bool Cronet_UrlRequestParams_disable_cache_get(IntPtr urlRequestParamsPtr);
         
         [DllImport(CronetLoader.Dll)]
@@ -91,6 +92,7 @@ namespace CronetSharp.Cronet
         internal static extern IntPtr Cronet_UrlRequestParams_upload_data_provider_executor_get(IntPtr urlRequestParamsPtr);
         
         [DllImport(CronetLoader.Dll)]
+        [return: MarshalAs(UnmanagedType.U1)]
         internal static extern bool Cronet_UrlRequestParams_allow_direct_executor_get(IntPtr urlRequestParamsPtr);
         
         [DllImport(CronetLoader.Dll)]

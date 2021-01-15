@@ -11,6 +11,11 @@ namespace CronetSharp
             Pointer = Cronet.Buffer.Cronet_Buffer_Create();
         }
         
+        public ByteBuffer(IntPtr bufferPtr)
+        {
+            Pointer = bufferPtr;
+        }
+        
         public ByteBuffer(ulong size)
         {
             Pointer = Cronet.Buffer.Cronet_Buffer_Create();

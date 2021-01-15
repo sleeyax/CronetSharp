@@ -15,6 +15,12 @@ namespace CronetSharp
             _urlRequestParamsPtr = Cronet.UrlRequestParams.Cronet_UrlRequestParams_Create();
         }
         
+        public UrlRequest(IntPtr urlRequestPtr)
+        {
+            _urlRequestPtr = urlRequestPtr;
+            _urlRequestParamsPtr = Cronet.UrlRequestParams.Cronet_UrlRequestParams_Create();
+        }
+        
         public UrlRequest(UrlRequestParams urlRequestParams)
         {
             _urlRequestPtr = Cronet.UrlRequest.Cronet_UrlRequest_Create();
@@ -67,7 +73,7 @@ namespace CronetSharp
         {
             Cronet.UrlRequest.Cronet_UrlRequest_Read(_urlRequestPtr, buffer.Pointer);
         }
-        // TODO: read(ByteBuffer buffer) 
+        // TODO: getStatus(Listener)
         
         /// <summary>
         /// Returns true if the request was successfully started and is now finished (completed, canceled, or failed).
@@ -182,9 +188,135 @@ namespace CronetSharp
             }
         }
 
-        public class Callback
+        /// <summary>
+        /// Users of Cronet extend this class to receive callbacks indicating the progress of a UrlRequest being processed.
+        /// An instance of this class is passed in to UrlRequest.Builder's constructor when constructing the UrlRequest.
+        /// 
+        /// Note: All methods will be invoked on the thread of the Executor used during construction of the UrlRequest.
+        /// </summary>
+        public abstract class Callback : Cronet.UrlRequestCallback
         {
-           
+            /// <summary>
+            /// Invoked if request was canceled via cancel().
+            /// Once invoked, no other UrlRequest.Callback methods will be invoked.
+            /// Default implementation takes no action.
+            /// </summary>
+            public virtual void OnCanceled(UrlRequest request, UrlResponseInfo info) { }
+
+            /// <summary>
+            /// Invoked if request failed for any reason after start().
+            /// Once invoked, no other UrlRequest.Callback methods will be invoked.
+            /// error provides information about the failure.
+            /// </summary>
+            /// <param name="request"></param>
+            /// <param name="info"></param>
+            /// <param name="error"></param>
+            public abstract void OnFailed(UrlRequest request, UrlResponseInfo info, CronetException error);
+
+            /// <summary>
+            /// Invoked whenever part of the response body has been read.
+            /// Only part of the buffer may be populated, even if the entire response body has not yet been consumed.
+            /// With the exception of onCanceled(), no other UrlRequest.Callback method will be invoked for the request, including onSucceeded() and onFailed(), until UrlRequest.read() is called to attempt to continue reading the response body.
+            /// </summary>
+            /// <param name="request"></param>
+            /// <param name="info"></param>
+            /// <param name="byteBuffer"></param>
+            public abstract void OnReadCompleted(UrlRequest request, UrlResponseInfo info, ByteBuffer byteBuffer);
+
+            /// <summary>
+            /// Invoked whenever a redirect is encountered. This will only be invoked between the call to start() and onResponseStarted().
+            /// The body of the redirect response, if it has one, will be ignored.
+            /// The redirect will not be followed until the URLRequest's followRedirect() method is called, either synchronously or asynchronously.
+            /// </summary>
+            /// <param name="request"></param>
+            /// <param name="info"></param>
+            /// <param name="newLocationUrl"></param>
+            public abstract void OnRedirectReceived(UrlRequest request, UrlResponseInfo info, String newLocationUrl);
+
+            /// <summary>
+            /// Invoked when the final set of headers, after all redirects, is received. Will only be invoked once for each request.
+            /// With the exception of onCanceled(), no other UrlRequest.Callback method will be invoked for the request, including onSucceeded() and onFailed(), until UrlRequest.read() is called to attempt to start reading the response body.
+            /// </summary>
+            /// <param name="request"></param>
+            /// <param name="info"></param>
+            public abstract void OnResponseStarted(UrlRequest request, UrlResponseInfo info);
+
+            /// <summary>
+            /// Invoked when request is completed successfully.
+            /// Once invoked, no other UrlRequest.Callback methods will be invoked.
+            /// </summary>
+            /// <param name="request"></param>
+            /// <param name="info"></param>
+            public abstract void OnSucceeded(UrlRequest request, UrlResponseInfo info);
+
+            internal override void OnCanceled(IntPtr urlRequestPtr, IntPtr urlResponseInfoPtr)
+            {
+                OnCanceled(new UrlRequest(urlRequestPtr), new UrlResponseInfo(urlResponseInfoPtr));
+            }
+
+            internal override void OnRedirectReceived(IntPtr urlRequestPtr, IntPtr urlResponseInfoPtr, string newLocationUrl)
+            {
+                OnRedirectReceived(new UrlRequest(urlRequestPtr), new UrlResponseInfo(urlResponseInfoPtr), newLocationUrl);
+            }
+
+            internal override void OnResponseStarted(IntPtr urlRequestPtr, IntPtr urlResponseInfoPtr)
+            {
+               OnResponseStarted(new UrlRequest(urlRequestPtr), new UrlResponseInfo(urlResponseInfoPtr));
+            }
+
+            internal override void OnReadCompleted(IntPtr urlRequestPtr, IntPtr urlResponseInfoPtr, IntPtr bufferPtr, ulong bytesRead)
+            {
+                OnReadCompleted(new UrlRequest(urlRequestPtr), new UrlResponseInfo(urlResponseInfoPtr), new ByteBuffer(bufferPtr));
+            }
+
+            internal override void OnSucceeded(IntPtr urlRequestPtr, IntPtr urlResponseInfoPtr)
+            {
+                OnSucceeded(new UrlRequest(urlRequestPtr), new UrlResponseInfo(urlResponseInfoPtr));
+            }
+
+            internal override void OnFailed(IntPtr urlRequestPtr, IntPtr urlResponseInfoPtr, IntPtr errorPtr)
+            {
+                OnFailed(new UrlRequest(urlRequestPtr), new UrlResponseInfo(urlResponseInfoPtr), new CronetException(errorPtr));
+            }
+
+            /// <summary>
+            /// Default callback implementation.
+            ///
+            /// Inherit from UrlRequest.Callback to create your own.
+            /// </summary>
+            public class Default : UrlRequest.Callback
+            {
+                public override void OnRedirectReceived(UrlRequest request, UrlResponseInfo info, string newLocationUrl)
+                {
+                    // You should call the request.followRedirect() method to continue
+                    // processing the request.
+                    request.FollowRedirect();
+                }
+
+                public override void OnResponseStarted(UrlRequest request, UrlResponseInfo info)
+                {
+                    // You should call the request.read() method before the request can be
+                    // further processed. The following instruction provides a ByteBuffer object
+                    // with a capacity of 102400 bytes to the read() method.
+                    request.Read(ByteBuffer.Allocate(102400));
+                }
+                
+                public override void OnReadCompleted(UrlRequest request, UrlResponseInfo info, ByteBuffer byteBuffer)
+                {
+                    // You should keep reading the request until there's no more data.
+                    request.Read(ByteBuffer.Allocate(102400));
+                }
+                
+                public override void OnSucceeded(UrlRequest request, UrlResponseInfo info)
+                {
+                    // let's do nothing here
+                }
+                
+                public override void OnFailed(UrlRequest request, UrlResponseInfo info, CronetException error)
+                {
+                    // let's do nothing here
+                }
+            }
         }
         
     }

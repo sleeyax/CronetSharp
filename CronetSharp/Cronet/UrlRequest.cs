@@ -17,7 +17,7 @@ namespace CronetSharp.Cronet
         internal static extern EngineResult Cronet_UrlRequest_InitWithParams(
             IntPtr urlRequestPtr, 
             IntPtr enginePtr,
-            [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(StringMarshaler))] string url,
+            string url,
             IntPtr urlRequestParamsPtr,
             IntPtr urlRequestCallbackPtr,
             IntPtr executorPtr
@@ -36,6 +36,7 @@ namespace CronetSharp.Cronet
         internal static extern void Cronet_UrlRequest_Cancel(IntPtr urlRequestPtr);
         
         [DllImport(CronetLoader.Dll)]
+        [return: MarshalAs(UnmanagedType.U1)]
         internal static extern bool Cronet_UrlRequest_IsDone(IntPtr urlRequestPtr);
     
         [DllImport(CronetLoader.Dll)]
