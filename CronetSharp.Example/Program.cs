@@ -18,7 +18,7 @@ namespace example
             Console.WriteLine($"Engine version: {engine.Version}");
             
             // create default executor
-            var executor = new CronetExecutor();
+            var executor = new Executor();
             
             // create request callback
             

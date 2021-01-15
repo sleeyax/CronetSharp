@@ -4,18 +4,18 @@ using System.Linq;
 
 namespace CronetSharp
 {
-    public class CronetUrlRequest
+    public class UrlRequest
     {
         private readonly IntPtr _urlRequestPtr;
         private readonly IntPtr _urlRequestParamsPtr;
 
-        public CronetUrlRequest()
+        public UrlRequest()
         {
             _urlRequestPtr = Cronet.UrlRequest.Cronet_UrlRequest_Create();
             _urlRequestParamsPtr = Cronet.UrlRequestParams.Cronet_UrlRequestParams_Create();
         }
         
-        public CronetUrlRequest(CronetUrlRequestParams urlRequestParams)
+        public UrlRequest(UrlRequestParams urlRequestParams)
         {
             _urlRequestPtr = Cronet.UrlRequest.Cronet_UrlRequest_Create();
             _urlRequestParamsPtr = urlRequestParams.Pointer;
@@ -71,7 +71,7 @@ namespace CronetSharp
 
         public class Builder
         {
-            private readonly CronetUrlRequestParams _urlRequestParams;
+            private readonly UrlRequestParams _urlRequestParams;
             
             /// <summary>
             /// Builder for UrlRequests.
@@ -80,19 +80,19 @@ namespace CronetSharp
             /// </summary>
             public Builder()
             {
-                _urlRequestParams = new CronetUrlRequestParams();
+                _urlRequestParams = new UrlRequestParams();
             }
 
             /// <summary>
-            /// Creates a CronetUrlRequest using configuration within this Builder.
+            /// Creates a UrlRequest using configuration within this Builder.
             /// </summary>
             /// <returns></returns>
-            public CronetUrlRequest Build()
+            public UrlRequest Build()
             {
-                return new CronetUrlRequest(_urlRequestParams);
+                return new UrlRequest(_urlRequestParams);
             }
 
-            public CronetUrlRequestParams GetParams()
+            public UrlRequestParams GetParams()
             {
                 return _urlRequestParams;
             }
@@ -121,7 +121,7 @@ namespace CronetSharp
             }
             
             /// <summary>
-            /// Marks that the executors this request will use to notify callbacks (for UploadDataProviders and CronetUrlRequest.Callbacks) is intentionally performing inline execution.
+            /// Marks that the executors this request will use to notify callbacks (for UploadDataProviders and UrlRequest.Callbacks) is intentionally performing inline execution.
             ///
             /// Warning: This option makes it easy to accidentally block the network thread. It should not be used if your callbacks perform disk I/O, acquire locks, or call into other code you don't carefully control and audit. 
             /// </summary>
@@ -171,6 +171,11 @@ namespace CronetSharp
                 _urlRequestParams.Priority = priority;
                 return this;
             }
+        }
+
+        public class Callback
+        {
+           
         }
         
     }

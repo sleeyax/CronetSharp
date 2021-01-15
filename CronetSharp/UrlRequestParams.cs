@@ -3,13 +3,13 @@ using System.Collections.Generic;
 
 namespace CronetSharp
 {
-    public class CronetUrlRequestParams
+    public class UrlRequestParams
     {
         public IntPtr Pointer { get; }
 
         private Dictionary<string, string> _headers;
 
-        public CronetUrlRequestParams()
+        public UrlRequestParams()
         {
             Pointer = Cronet.UrlRequestParams.Cronet_UrlRequestParams_Create();
         }
@@ -42,7 +42,7 @@ namespace CronetSharp
         }
 
         /// <summary>
-        /// Marks that the executors this request will use to notify callbacks (for UploadDataProviders and CronetUrlRequest.Callbacks) is intentionally performing inline execution.
+        /// Marks that the executors this request will use to notify callbacks (for UploadDataProviders and UrlRequest.Callbacks) is intentionally performing inline execution.
         /// </summary>
         public bool AllowDirectExecutor
         {
