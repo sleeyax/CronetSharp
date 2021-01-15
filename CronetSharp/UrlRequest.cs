@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace CronetSharp
@@ -21,11 +22,18 @@ namespace CronetSharp
             _urlRequestParamsPtr = Cronet.UrlRequestParams.Cronet_UrlRequestParams_Create();
         }
         
+        public UrlRequest(IntPtr urlRequestPtr, IntPtr urlRequestParamsPtr)
+        {
+            _urlRequestPtr = urlRequestPtr;
+            _urlRequestParamsPtr = urlRequestParamsPtr;
+        }
+        
         public UrlRequest(UrlRequestParams urlRequestParams)
         {
             _urlRequestPtr = Cronet.UrlRequest.Cronet_UrlRequest_Create();
             _urlRequestParamsPtr = urlRequestParams.Pointer;
         }
+        
 
         /// <summary>
         /// Starts the request, all callbacks go to UrlRequest.Callback.
@@ -86,6 +94,8 @@ namespace CronetSharp
 
         public class Builder
         {
+            private readonly IntPtr _urlRequestPtr;
+
             private readonly UrlRequestParams _urlRequestParams;
             
             /// <summary>
@@ -97,6 +107,12 @@ namespace CronetSharp
             {
                 _urlRequestParams = new UrlRequestParams();
             }
+            
+            public Builder(IntPtr urlRequestPtr, IntPtr urlRequestParamsPtr)
+            {
+                _urlRequestPtr = urlRequestPtr;
+                _urlRequestParams = new UrlRequestParams(urlRequestParamsPtr);
+            }
 
             /// <summary>
             /// Creates a UrlRequest using configuration within this Builder.
@@ -104,7 +120,7 @@ namespace CronetSharp
             /// <returns></returns>
             public UrlRequest Build()
             {
-                return new UrlRequest(_urlRequestParams);
+                return _urlRequestPtr != default ? new UrlRequest(_urlRequestPtr, _urlRequestParams.Pointer) :  new UrlRequest(_urlRequestParams);
             }
 
             public UrlRequestParams GetParams()
@@ -281,13 +297,21 @@ namespace CronetSharp
 
             /// <summary>
             /// Default callback implementation.
-            ///
-            /// Inherit from UrlRequest.Callback to create your own.
+            /// You should inherit from UrlRequest.Callback to create your own.
+            /// This is meant for testing only and for that reason console logs will only be visible while debugging your app.
             /// </summary>
-            public class Default : UrlRequest.Callback
+            public class Default : Callback
             {
+                private void Log(string msg)
+                {
+                    #if DEBUG
+                        Debug.WriteLine(msg);
+                    #endif
+                }
+                
                 public override void OnRedirectReceived(UrlRequest request, UrlResponseInfo info, string newLocationUrl)
                 {
+                    Log("Redirect received");
                     // You should call the request.followRedirect() method to continue
                     // processing the request.
                     request.FollowRedirect();
@@ -295,6 +319,7 @@ namespace CronetSharp
 
                 public override void OnResponseStarted(UrlRequest request, UrlResponseInfo info)
                 {
+                    Log("Response started");
                     // You should call the request.read() method before the request can be
                     // further processed. The following instruction provides a ByteBuffer object
                     // with a capacity of 102400 bytes to the read() method.
@@ -303,18 +328,28 @@ namespace CronetSharp
                 
                 public override void OnReadCompleted(UrlRequest request, UrlResponseInfo info, ByteBuffer byteBuffer)
                 {
+                    Log("Read completed");
                     // You should keep reading the request until there's no more data.
+                    byteBuffer.Destroy(); // TODO: bytebuffer.clear() & reuse same bytebuffer?
                     request.Read(ByteBuffer.Allocate(102400));
                 }
                 
                 public override void OnSucceeded(UrlRequest request, UrlResponseInfo info)
                 {
                     // let's do nothing here
+                    Log("Succeeded");
                 }
                 
                 public override void OnFailed(UrlRequest request, UrlResponseInfo info, CronetException error)
                 {
                     // let's do nothing here
+                    Log("Failed");
+                }
+
+                public override void OnCanceled(UrlRequest request, UrlResponseInfo info)
+                {
+                    // let's do nothing here
+                    Log("Canceled");
                 }
             }
         }

@@ -13,15 +13,22 @@ namespace example
             ILoader loader = new CronetLoader();
             loader.Load();
 
-            // create engine
+            // create cronet engine
             var engine = CreateEngine();
             Console.WriteLine($"Engine version: {engine.Version}");
             
             // create default executor
             var executor = new Executor();
-            
-            // create request callback
-            
+
+            // create callback class
+            var myUrlRequestCallback = new UrlRequest.Callback.Default();
+
+            // Create and configure a UrlRequest object
+            var requestBuilder = engine.NewUrlRequestBuilder("https://sleeyax.dev", myUrlRequestCallback, executor);
+            var urlRequest = requestBuilder.Build();
+
+            Console.WriteLine("Starting request..");
+            urlRequest.Start();
             
             engine.Shutdown();
             engine.Destroy();

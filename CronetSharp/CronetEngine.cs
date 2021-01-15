@@ -1,4 +1,5 @@
 ﻿using System;
+using CronetSharp.Cronet;
 
 namespace CronetSharp
 {
@@ -17,6 +18,36 @@ namespace CronetSharp
         {
             _enginePtr = Cronet.Engine.Cronet_Engine_Create();
             _engineParamsPtr = engineParams.Pointer;
+        }
+
+        /// <summary>
+        /// Creates a builder for UrlRequest.
+        /// All callbacks for generated UrlRequest objects will be invoked on executor's threads.
+        /// executor must not run tasks on the thread calling execute(Runnable) to prevent blocking networking operations and causing exceptions during shutdown.
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="callback"></param>
+        /// <param name="executor"></param>
+        /// <returns></returns>
+        public UrlRequest.Builder NewUrlRequestBuilder(string url, UrlRequest.Callback callback, Executor executor)
+        {
+            // TODO: convert callback & executor to native ptr
+            IntPtr callbackPtr = IntPtr.Zero;
+            IntPtr executorPtr = IntPtr.Zero;
+
+            IntPtr urlRequestPtr = Cronet.UrlRequest.Cronet_UrlRequest_Create();
+            IntPtr urlRequestParamsPtr = Cronet.UrlRequestParams.Cronet_UrlRequestParams_Create();
+
+            EngineResult result = Cronet.UrlRequest.Cronet_UrlRequest_InitWithParams(
+                urlRequestPtr,
+                _enginePtr,
+                url,
+                urlRequestParamsPtr,
+                callbackPtr,
+                executorPtr
+            );
+
+            return new UrlRequest.Builder(urlRequestPtr, urlRequestParamsPtr);
         }
 
         public Cronet.EngineResult Start()
