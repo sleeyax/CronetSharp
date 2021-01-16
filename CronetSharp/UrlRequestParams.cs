@@ -19,6 +19,11 @@ namespace CronetSharp
             Pointer = urlRequestParamsPtr;
         }
 
+        public void Destroy()
+        {
+            Cronet.UrlRequestParams.Cronet_UrlRequestParams_Destroy(Pointer);
+        }
+
         public void AddHeader(string header, string value)
         {
             _headers[header] = value;

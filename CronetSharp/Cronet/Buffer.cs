@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using CronetSharp.Cronet.Marshalers;
 using CronetSharp.CronetAsm;
 
 namespace CronetSharp.Cronet
@@ -22,6 +23,7 @@ namespace CronetSharp.Cronet
         internal static extern ulong Cronet_Buffer_GetSize(IntPtr bufferPtr);
         
         [DllImport(CronetLoader.Dll)]
-        internal static extern IntPtr Cronet_Buffer_GetData(IntPtr bufferPtr);
+        [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(StringMarshaler))]
+        internal static extern string Cronet_Buffer_GetData(IntPtr bufferPtr);
     }
 }

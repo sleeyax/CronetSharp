@@ -44,7 +44,7 @@ namespace CronetSharp
         /// Read buffer contents.
         /// </summary>
         /// <returns></returns>
-        public IntPtr GetData()
+        public string GetData()
         {
             return Cronet.Buffer.Cronet_Buffer_GetData(Pointer);
         }

@@ -36,6 +36,7 @@ namespace example
                 OnReadCompleted = (request, info, byteBuffer, bytesRead) =>
                 {
                     Console.WriteLine("-> read completed");
+                    Console.WriteLine(byteBuffer.GetData());
                     byteBuffer.Destroy(); // TODO: bytebuffer.clear() & reuse same bytebuffer?
                     request.Read(ByteBuffer.Allocate(102400));
                 },
@@ -67,6 +68,7 @@ namespace example
             };
             var urlRequest = engine.NewUrlRequest("https://sleeyax.dev", myUrlRequestCallback, executor, urlRequestParams);
             Console.WriteLine($"request priority : {urlRequestParams.Priority}");
+            urlRequestParams.Destroy();
 
             Console.WriteLine("Starting request...");
             urlRequest.Start();

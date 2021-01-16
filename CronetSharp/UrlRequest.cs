@@ -18,6 +18,11 @@ namespace CronetSharp
             _urlRequestPtr = urlRequestPtr;
         }
 
+        public void Destroy()
+        {
+            Cronet.UrlRequest.Cronet_UrlRequest_Destroy(_urlRequestPtr);
+        }
+
         /// <summary>
         /// Starts the request, all callbacks go to UrlRequest.Callback.
         /// May only be called once.
