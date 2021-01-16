@@ -32,16 +32,16 @@ namespace CronetSharp
         /// Set the request headers.
         /// </summary>
         /// <param name="headers"></param>
-        public void SetHeaders(Dictionary<string, string> headers)
+        public void SetHeaders(IList<HttpHeader> headers)
         {
             foreach (var header in headers)
-                AddHeader(header.Key, header.Value);
+                Cronet.UrlRequestParams.Cronet_UrlRequestParams_request_headers_add(Pointer, header.Pointer);
         }
         
         /// <summary>
         /// Set or get the headers.
         /// </summary>
-        public Dictionary<string, string> Headers
+        public IList<HttpHeader> Headers
         {
             set => SetHeaders(value);
         }

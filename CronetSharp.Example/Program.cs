@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using CronetSharp;
 using CronetSharp.Cronet;
 using CronetSharp.CronetAsm;
@@ -67,9 +68,16 @@ namespace example
             var urlRequestParams = new UrlRequestParams
             {
                 HttpMethod = "GET",
-                Priority = RequestPriority.Highest
+                Priority = RequestPriority.Highest,
+                Headers = new List<HttpHeader>
+                {
+                    new HttpHeader("user-agent", "mycustomuseragent"),
+                    new HttpHeader("accept", "*/*"),
+                    new HttpHeader("cookie", "abc=def; foo=bar"),
+                    // new HttpHeader("cookie", "foo=bar")
+                }
             };
-            var urlRequest = engine.NewUrlRequest("https://sleeyax.dev", myUrlRequestCallback, executor, urlRequestParams);
+            var urlRequest = engine.NewUrlRequest("https://httpbin.org/anything", myUrlRequestCallback, executor, urlRequestParams);
             Console.WriteLine($"request priority : {urlRequestParams.Priority}");
             urlRequestParams.Destroy();
 
