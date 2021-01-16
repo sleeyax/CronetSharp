@@ -44,8 +44,11 @@ namespace example
                 {
                     Console.WriteLine("-> succeeded");
                     Console.WriteLine($"Negotiated protocol: {info.NegotiatedProtocol}");
-                    Console.WriteLine($"Response status code: {info.HttpStatusCode}");
-                    Console.WriteLine($"Amount of response bytes received: {info.ReceivedByteCount}");
+                    Console.WriteLine($"Response Status code: {info.HttpStatusCode}");
+                    Console.WriteLine($"Response Headers: ");
+                    foreach (var header in info.Headers)
+                        Console.WriteLine($"{header.Name}:{header.Value}");
+                    Console.WriteLine($"Response bytes received: {info.ReceivedByteCount}");
                 },
                 OnFailed = (request, info, error) => Console.WriteLine("-> failed"),
                 OnCancelled = (request, info) => Console.WriteLine("-> canceled")

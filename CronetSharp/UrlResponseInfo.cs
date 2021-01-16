@@ -22,15 +22,28 @@ namespace CronetSharp
         /// Each list of values for a single header field is in the same order they were received over the wire.
         /// </summary>
         /// <value></value>
-        public IDictionary<string, IList<string>> Headers
+        public IList<HttpHeader> Headers
         {
-            // TODO: get & set actual headers
             get
-            {
-                IntPtr firstHeader = Cronet.UrlResponseInfo.Cronet_UrlResponseInfo_all_headers_list_at(_urlResponseInfoPtr, 0);
-                return new Dictionary<string, IList<string>>();
+            { 
+                var headers = new List<HttpHeader>();
+                
+                var size = Cronet.UrlResponseInfo.Cronet_UrlResponseInfo_all_headers_list_size(_urlResponseInfoPtr);
+                for (uint i = 0; i < size; i++)
+                {
+                    var httpHeaderPtr = Cronet.UrlResponseInfo.Cronet_UrlResponseInfo_all_headers_list_at(_urlResponseInfoPtr, i);
+                    headers.Add(new HttpHeader(httpHeaderPtr));
+                }
+
+                return headers;
             }
-            set => Cronet.UrlResponseInfo.Cronet_UrlResponseInfo_all_headers_list_add(_urlResponseInfoPtr, IntPtr.Zero);
+            set
+            {
+                foreach (var header in value)
+                {
+                    Cronet.UrlResponseInfo.Cronet_UrlResponseInfo_all_headers_list_add(_urlResponseInfoPtr, header.Pointer);
+                }
+            }
         }
 
         /// <summary>

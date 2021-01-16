@@ -7,8 +7,6 @@ namespace CronetSharp
     {
         public IntPtr Pointer { get; }
 
-        private Dictionary<string, string> _headers;
-
         public UrlRequestParams()
         {
             Pointer = Cronet.UrlRequestParams.Cronet_UrlRequestParams_Create();
@@ -26,9 +24,8 @@ namespace CronetSharp
 
         public void AddHeader(string header, string value)
         {
-            _headers[header] = value;
-            IntPtr headersPtr = IntPtr.Zero; // TODO: create headers
-            Cronet.UrlRequestParams.Cronet_UrlRequestParams_request_headers_add(Pointer, headersPtr);
+            var httpHeader = new HttpHeader(header, value);
+            Cronet.UrlRequestParams.Cronet_UrlRequestParams_request_headers_add(Pointer, httpHeader.Pointer);
         }
 
         /// <summary>
@@ -37,7 +34,6 @@ namespace CronetSharp
         /// <param name="headers"></param>
         public void SetHeaders(Dictionary<string, string> headers)
         {
-            _headers = headers;
             foreach (var header in headers)
                 AddHeader(header.Key, header.Value);
         }
@@ -47,7 +43,6 @@ namespace CronetSharp
         /// </summary>
         public Dictionary<string, string> Headers
         {
-            get => _headers;
             set => SetHeaders(value);
         }
 
