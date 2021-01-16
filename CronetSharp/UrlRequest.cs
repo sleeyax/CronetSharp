@@ -60,6 +60,16 @@ namespace CronetSharp
         }
 
         /// <summary>
+        /// Queries the status of the request.
+        /// </summary>
+        /// <param name="onStatus"></param>
+        public void GetStatus(Action<Cronet.UrlRequestStatus> onStatus)
+        {
+            IntPtr urlRequestStatusListenerPtr = Cronet.UrlRequestStatusListener.Cronet_UrlRequestStatusListener_CreateWith((self, status) => onStatus(status));
+            Cronet.UrlRequest.Cronet_UrlRequest_GetStatus(_urlRequestPtr, urlRequestStatusListenerPtr);
+        }
+
+        /// <summary>
         /// Attempts to read part of the response body into the provided buffer.
         /// Must only be called at most once in response to each invocation of the onResponseStarted() and onReadCompleted() methods of the UrlRequest.Callback.
         /// Each call will result in an asynchronous call to either the Callback's onReadCompleted() method if data is read, its onSucceeded() method if there's no more data to read, or its onFailed() method if there's an error.
@@ -69,8 +79,7 @@ namespace CronetSharp
         {
             Cronet.UrlRequest.Cronet_UrlRequest_Read(_urlRequestPtr, buffer.Pointer);
         }
-        // TODO: getStatus(Listener)
-        
+
         /// <summary>
         /// Returns true if the request was successfully started and is now finished (completed, canceled, or failed).
         /// </summary>

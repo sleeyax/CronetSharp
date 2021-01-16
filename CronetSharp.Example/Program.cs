@@ -72,9 +72,12 @@ namespace example
 
             Console.WriteLine("Starting request...");
             urlRequest.Start();
+            // query status of the request (note: this is not a 'callback setter' so it will only log a value once)
+            urlRequest.GetStatus(status => Console.WriteLine($"Current request status: {status}"));
 
             Console.WriteLine("Press any key to stop...");
             Console.ReadKey();
+            urlRequest.Destroy();
             engine.Shutdown();
             engine.Destroy();
         }
@@ -84,7 +87,7 @@ namespace example
             var engineParams  = new CronetEngineParams
             {
                 UserAgent = "CronetSample/1",
-                QuicEnabled = true,
+                QuicEnabled = false,
             };
             var engine = new CronetEngine(engineParams);
             engine.Start();
