@@ -7,32 +7,16 @@ namespace CronetSharp
     public class UrlRequest
     {
         private readonly IntPtr _urlRequestPtr;
-        private readonly IntPtr _urlRequestParamsPtr;
 
         public UrlRequest()
         {
             _urlRequestPtr = Cronet.UrlRequest.Cronet_UrlRequest_Create();
-            _urlRequestParamsPtr = Cronet.UrlRequestParams.Cronet_UrlRequestParams_Create();
         }
         
         public UrlRequest(IntPtr urlRequestPtr)
         {
             _urlRequestPtr = urlRequestPtr;
-            _urlRequestParamsPtr = Cronet.UrlRequestParams.Cronet_UrlRequestParams_Create();
         }
-        
-        public UrlRequest(IntPtr urlRequestPtr, IntPtr urlRequestParamsPtr)
-        {
-            _urlRequestPtr = urlRequestPtr;
-            _urlRequestParamsPtr = urlRequestParamsPtr;
-        }
-        
-        public UrlRequest(UrlRequestParams urlRequestParams)
-        {
-            _urlRequestPtr = Cronet.UrlRequest.Cronet_UrlRequest_Create();
-            _urlRequestParamsPtr = urlRequestParams.Pointer;
-        }
-        
 
         /// <summary>
         /// Starts the request, all callbacks go to UrlRequest.Callback.
@@ -119,7 +103,7 @@ namespace CronetSharp
             /// <returns></returns>
             public UrlRequest Build()
             {
-                return _urlRequestPtr != default ? new UrlRequest(_urlRequestPtr, _urlRequestParams.Pointer) :  new UrlRequest(_urlRequestParams);
+                return _urlRequestPtr != default ? new UrlRequest(_urlRequestPtr) : new UrlRequest();
             }
 
             public UrlRequestParams GetParams()

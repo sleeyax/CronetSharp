@@ -30,8 +30,6 @@ namespace CronetSharp
         /// <returns></returns>
         public UrlRequest.Builder NewUrlRequestBuilder(string url, UrlRequestCallback callback, Executor executor)
         {
-            IntPtr executorPtr = executor.Pointer;
-            IntPtr callbackPtr = callback.Pointer;
             IntPtr urlRequestPtr = Cronet.UrlRequest.Cronet_UrlRequest_Create();
             IntPtr urlRequestParamsPtr = Cronet.UrlRequestParams.Cronet_UrlRequestParams_Create();
 
@@ -40,11 +38,35 @@ namespace CronetSharp
                 _enginePtr,
                 url,
                 urlRequestParamsPtr,
-                callbackPtr,
-                executorPtr
+                callback.Pointer,
+                executor.Pointer
             );
 
             return new UrlRequest.Builder(urlRequestPtr, urlRequestParamsPtr);
+        }
+        
+        /// <summary>
+        /// Creates a new UrlRequest from given parameters.
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="callback"></param>
+        /// <param name="executor"></param>
+        /// <param name="urlRequestParams"></param>
+        /// <returns></returns>
+        public UrlRequest NewUrlRequest(string url, UrlRequestCallback callback, Executor executor, UrlRequestParams urlRequestParams)
+        {
+            IntPtr urlRequestPtr = Cronet.UrlRequest.Cronet_UrlRequest_Create();
+
+            Cronet.EngineResult result = Cronet.UrlRequest.Cronet_UrlRequest_InitWithParams(
+                urlRequestPtr,
+                _enginePtr,
+                url,
+                urlRequestParams.Pointer,
+                callback.Pointer,
+                executor.Pointer
+            );
+
+            return new UrlRequest(urlRequestPtr);
         }
 
         public Cronet.EngineResult Start()

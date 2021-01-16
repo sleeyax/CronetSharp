@@ -14,9 +14,9 @@ namespace CronetSharp
             Pointer = Cronet.UrlRequestParams.Cronet_UrlRequestParams_Create();
         }
         
-        public UrlRequestParams(IntPtr urlRequestPtr)
+        public UrlRequestParams(IntPtr urlRequestParamsPtr)
         {
-            Pointer = urlRequestPtr;
+            Pointer = urlRequestParamsPtr;
         }
 
         public void AddHeader(string header, string value)

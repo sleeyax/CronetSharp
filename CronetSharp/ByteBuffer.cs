@@ -21,13 +21,6 @@ namespace CronetSharp
             Pointer = Cronet.Buffer.Cronet_Buffer_Create();
             Cronet.Buffer.Cronet_Buffer_InitWithAlloc(Pointer, size);
         }
-        
-        // TODO: convert pointers to objects
-        public ByteBuffer(IntPtr rawDataPtr, ulong size, IntPtr bufferCallbackPtr)
-        {
-            Pointer = Cronet.Buffer.Cronet_Buffer_Create();
-            Cronet.Buffer.Cronet_Buffer_InitWithDataAndCallback(Pointer, rawDataPtr, size, bufferCallbackPtr);
-        }
 
         /// <summary>
         /// Allocates a new byte buffer. 
@@ -51,7 +44,7 @@ namespace CronetSharp
         /// Read buffer contents.
         /// </summary>
         /// <returns></returns>
-        public IntPtr Get()
+        public IntPtr GetData()
         {
             return Cronet.Buffer.Cronet_Buffer_GetData(Pointer);
         }
@@ -64,6 +57,5 @@ namespace CronetSharp
         {
             return Cronet.Buffer.Cronet_Buffer_GetSize(Pointer);
         }
-
     }
 }
