@@ -1,5 +1,4 @@
 ﻿using System;
-using CronetSharp.Cronet;
 
 namespace CronetSharp
 {
@@ -29,16 +28,14 @@ namespace CronetSharp
         /// <param name="callback"></param>
         /// <param name="executor"></param>
         /// <returns></returns>
-        public UrlRequest.Builder NewUrlRequestBuilder(string url, UrlRequest.Callback callback, Executor executor)
+        public UrlRequest.Builder NewUrlRequestBuilder(string url, UrlRequestCallback callback, Executor executor)
         {
-            // TODO: convert callback & executor to native ptr
-            IntPtr callbackPtr = IntPtr.Zero;
-            IntPtr executorPtr = IntPtr.Zero;
-
+            IntPtr executorPtr = executor.Pointer;
+            IntPtr callbackPtr = callback.Pointer;
             IntPtr urlRequestPtr = Cronet.UrlRequest.Cronet_UrlRequest_Create();
             IntPtr urlRequestParamsPtr = Cronet.UrlRequestParams.Cronet_UrlRequestParams_Create();
 
-            EngineResult result = Cronet.UrlRequest.Cronet_UrlRequest_InitWithParams(
+            Cronet.EngineResult result = Cronet.UrlRequest.Cronet_UrlRequest_InitWithParams(
                 urlRequestPtr,
                 _enginePtr,
                 url,

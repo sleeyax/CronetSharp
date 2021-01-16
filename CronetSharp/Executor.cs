@@ -1,25 +1,23 @@
 ﻿using System;
-using CronetSharp.Cronet;
 
 namespace CronetSharp
 {
-    public class Executor : IExecutor
+    public class Executor
     {
-        /// <summary>
-        /// Executes a callable synchronously.
-        ///
-        /// Inherit from this class to create your own implementation.
-        /// </summary>
-        public Executor() {}
+        public IntPtr Pointer { get; }
         
-        protected void Run(IntPtr runnablePtr) =>  Runnable.Cronet_Runnable_Run(runnablePtr);
-        
-        protected void Destroy(IntPtr runnablePtr) =>  Runnable.Cronet_Runnable_Destroy(runnablePtr);
-
-        public virtual void Execute(IntPtr runnablePtr)
+        public Executor()
         {
-            Run(runnablePtr);
-            Destroy(runnablePtr);
+            Pointer = Cronet.Executor.Cronet_Executor_CreateWith((self, command) =>
+            {
+                Cronet.Runnable.Cronet_Runnable_Run(command);
+                Cronet.Runnable.Cronet_Runnable_Destroy(command);
+            });
+        }
+
+        public void Destroy()
+        {
+            Cronet.Executor.Cronet_Executor_Destroy(Pointer);
         }
     }
 }
