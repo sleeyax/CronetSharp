@@ -10,13 +10,13 @@ namespace CronetSharp.CronetAsm
         internal const string Dll = "cronet.dll";
         
         [DllImport("kernel32.dll")]
-        private static extern IntPtr LoadLibrary(string dllToLoad);
+        protected static extern IntPtr LoadLibrary(string dllToLoad);
 
         /// <summary>
         /// Loads the cronet dll into the current process
         /// </summary>
         /// <param name="dll">relative path to the dll to load</param>
-        public void Load(string dll = Dll)
+        public virtual void Load(string dll = Dll)
         {
             var path = new Uri(typeof(Engine).Assembly.EscapedCodeBase).LocalPath;
             var dir = Path.GetDirectoryName(path);

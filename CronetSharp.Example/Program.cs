@@ -101,7 +101,6 @@ namespace example
                 QuicEnabled = false,
             };
             var engine = new CronetEngine(engineParams);
-            engine.Start();
             engineParams.Destroy();
             return engine;
         }
