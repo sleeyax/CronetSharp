@@ -37,7 +37,7 @@ namespace example
                 OnReadCompleted = (request, info, byteBuffer, bytesRead) =>
                 {
                     Console.WriteLine("-> read completed");
-                    Console.WriteLine(byteBuffer.GetData());
+                    Console.WriteLine(byteBuffer.GetDataAsString());
                     byteBuffer.Destroy(); // TODO: bytebuffer.clear() & reuse same bytebuffer?
                     request.Read(ByteBuffer.Allocate(102400));
                 },

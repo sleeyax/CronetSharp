@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Runtime.InteropServices;
+using CronetSharp.Cronet.Marshalers;
 
 namespace CronetSharp
 {
@@ -41,12 +43,25 @@ namespace CronetSharp
         }
 
         /// <summary>
+        /// Read buffer contents as string.
+        /// </summary>
+        /// <returns></returns>
+        public string GetDataAsString()
+        {
+            return (string) new StringMarshaler().MarshalNativeToManaged(Cronet.Buffer.Cronet_Buffer_GetData(Pointer));
+        }
+        
+        /// <summary>
         /// Read buffer contents.
         /// </summary>
         /// <returns></returns>
-        public string GetData()
+        public byte[] GetData()
         {
-            return Cronet.Buffer.Cronet_Buffer_GetData(Pointer);
+            int length = (int) Cronet.Buffer.Cronet_Buffer_GetSize(Pointer);
+            byte[] dest = new byte[length];
+            var src = Cronet.Buffer.Cronet_Buffer_GetData(Pointer);
+            Marshal.Copy(src, dest, 0, length);
+            return dest;
         }
 
         /// <summary>

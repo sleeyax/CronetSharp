@@ -25,5 +25,10 @@ namespace CronetSharp
                 (uploadDataSinkPtr, error) => handler.OnRewindError(new Exception(error))
             );
         }
+
+        public void Destroy()
+        {
+            Cronet.UploadDataSink.Cronet_UploadDataSink_Destroy(_uploadDataSinkPtr);
+        }
     }
 }

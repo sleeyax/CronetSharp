@@ -23,7 +23,6 @@ namespace CronetSharp.Cronet
         internal static extern ulong Cronet_Buffer_GetSize(IntPtr bufferPtr);
         
         [DllImport(CronetLoader.Dll)]
-        [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(StringMarshaler))]
-        internal static extern string Cronet_Buffer_GetData(IntPtr bufferPtr);
+        internal static extern IntPtr Cronet_Buffer_GetData(IntPtr bufferPtr);
     }
 }

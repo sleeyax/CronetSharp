@@ -9,16 +9,26 @@ namespace CronetSharp
     /// </summary>
     public class UploadDataProvider
     {
-        public IntPtr Pointer { get; }
+        private readonly IntPtr _uploadDataProviderPtr;
         
         public UploadDataProvider(UploadDataProviderHandler handler)
         {
-            Pointer = Cronet.UploadDataProvider.Cronet_UploadDataProvider_CreateWith(
+            _uploadDataProviderPtr = Cronet.UploadDataProvider.Cronet_UploadDataProvider_CreateWith(
                 uploadDataProviderPtr => handler.GetLength(),
                 (uploadDataProviderPtr, uploadDataSinkPtr, byteBufferPtr) => handler.Read(new UploadDataSink(uploadDataSinkPtr), new ByteBuffer(byteBufferPtr)),
                 (uploadDataProviderPtr, uploadDataSinkPtr) => handler.Rewind(new UploadDataSink(uploadDataSinkPtr)),
                 uploadDataProviderPtr => handler.Close()
             );
+        }
+
+        public void Destroy()
+        {
+            Cronet.UploadDataProvider.Cronet_UploadDataProvider_Destroy(_uploadDataProviderPtr);
+        }
+
+        public void Close()
+        {
+            Cronet.UploadDataProvider.Cronet_UploadDataProvider_Close(_uploadDataProviderPtr);
         }
     }
 }
