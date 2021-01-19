@@ -5,22 +5,6 @@ using CronetSharp.CronetAsm;
 
 namespace CronetSharp.Cronet
 {
-    public enum RequestPriority
-    {
-        Idle,
-        Lowest,
-        Low,
-        Medium,
-        Highest,
-    }
-
-    internal enum Idempotency
-    {
-        Default,
-        Idempotent,
-        NoIdempotent,
-    }
-    
     internal static class UrlRequestParams
     {
         [DllImport(CronetLoader.Dll)]

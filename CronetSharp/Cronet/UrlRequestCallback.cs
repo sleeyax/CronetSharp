@@ -4,36 +4,36 @@ using CronetSharp.CronetAsm;
 
 namespace CronetSharp.Cronet
 {
-    internal delegate void OnRedirectReceivedFunc(
-        IntPtr urlRequestCallbackPtr,
-        IntPtr urlRequestPtr,
-        IntPtr urlResponseInfoPtr,
-        string newLocationUrl
-    );
-    
-    internal delegate void OnResponseStartedFunc(IntPtr urlRequestCallbackPtr, IntPtr urlRequestPtr, IntPtr urlResponseInfoPtr);
-    
-    internal delegate void OnReadCompletedFunc(
-        IntPtr urlRequestCallbackPtr,
-        IntPtr urlRequestPtr,
-        IntPtr urlResponseInfoPtr,
-        IntPtr bufferPtr,
-        ulong bytesRead
-    );
-    
-    internal delegate void OnSucceededFunc(IntPtr urlRequestCallbackPtr, IntPtr urlRequestPtr, IntPtr urlResponseInfoPtr);
-    
-    internal delegate void OnFailedFunc(
-        IntPtr urlRequestCallbackPtr,
-        IntPtr urlRequestPtr,
-        IntPtr urlResponseInfoPtr,
-        IntPtr errorPtr
-    );
-    
-    internal delegate void OnCanceledFunc(IntPtr urlRequestCallbackPtr, IntPtr urlRequestPtr, IntPtr urlResponseInfoPtr);
-
     internal static class UrlRequestCallback
     {
+        internal delegate void OnRedirectReceivedFunc(
+            IntPtr urlRequestCallbackPtr,
+            IntPtr urlRequestPtr,
+            IntPtr urlResponseInfoPtr,
+            string newLocationUrl
+        );
+    
+        internal delegate void OnResponseStartedFunc(IntPtr urlRequestCallbackPtr, IntPtr urlRequestPtr, IntPtr urlResponseInfoPtr);
+    
+        internal delegate void OnReadCompletedFunc(
+            IntPtr urlRequestCallbackPtr,
+            IntPtr urlRequestPtr,
+            IntPtr urlResponseInfoPtr,
+            IntPtr bufferPtr,
+            ulong bytesRead
+        );
+    
+        internal delegate void OnSucceededFunc(IntPtr urlRequestCallbackPtr, IntPtr urlRequestPtr, IntPtr urlResponseInfoPtr);
+    
+        internal delegate void OnFailedFunc(
+            IntPtr urlRequestCallbackPtr,
+            IntPtr urlRequestPtr,
+            IntPtr urlResponseInfoPtr,
+            IntPtr errorPtr
+        );
+    
+        internal delegate void OnCanceledFunc(IntPtr urlRequestCallbackPtr, IntPtr urlRequestPtr, IntPtr urlResponseInfoPtr);
+        
         [DllImport(CronetLoader.Dll)]
         internal static extern void Cronet_UrlRequestCallback_Destroy(IntPtr urlRequestCallbackPtr);
         

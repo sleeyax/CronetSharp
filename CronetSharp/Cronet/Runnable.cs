@@ -4,10 +4,10 @@ using CronetSharp.CronetAsm;
 
 namespace CronetSharp.Cronet
 {
-    internal delegate void RunFunc(IntPtr runnablePtr);
-
     internal class Runnable
     {
+        internal delegate void RunFunc(IntPtr runnablePtr);
+
         [DllImport(CronetLoader.Dll)]
         internal static extern void Cronet_Runnable_Run(IntPtr runnablePtr);
         
