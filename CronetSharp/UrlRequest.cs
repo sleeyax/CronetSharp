@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using CronetSharp.Cronet;
 
 namespace CronetSharp
 {
@@ -218,6 +219,17 @@ namespace CronetSharp
             {
                 _urlRequestParams.UploadDataProvider = provider;
                 if (executor != null) _urlRequestParams.UploadDataProviderExecutor = executor;
+                return this;
+            }
+
+            /// <summary>
+            /// Sets idempotency
+            /// </summary>
+            /// <param name="idempotency"></param>
+            /// <returns></returns>
+            public Builder SetIdempotency(Idempotency idempotency)
+            {
+                _urlRequestParams.Idempotency = idempotency;
                 return this;
             }
         }

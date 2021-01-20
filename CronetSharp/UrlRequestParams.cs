@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using CronetSharp.Cronet;
 
 namespace CronetSharp
 {
@@ -105,6 +106,23 @@ namespace CronetSharp
         {
             get => new Executor(Cronet.UrlRequestParams.Cronet_UrlRequestParams_upload_data_provider_executor_get(Pointer));
             set => Cronet.UrlRequestParams.Cronet_UrlRequestParams_upload_data_provider_executor_set(Pointer, value.Pointer);
+        }
+
+        /// <summary>
+        /// Sets idempotency
+        /// </summary>
+        public Idempotency Idempotency
+        {
+            get => Cronet.UrlRequestParams.Cronet_UrlRequestParams_idempotency_get(Pointer);
+            set => Cronet.UrlRequestParams.Cronet_UrlRequestParams_idempotency_set(Pointer, value);
+        }
+
+        /// <summary>
+        /// Remove all headers
+        /// </summary>
+        public void ClearHeaders()
+        {
+            Cronet.UrlRequestParams.Cronet_UrlRequestParams_request_headers_clear(Pointer);
         }
     }
 }

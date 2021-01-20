@@ -50,6 +50,9 @@ namespace CronetSharp.Cronet
         internal static extern void Cronet_UrlRequestParams_idempotency_set(IntPtr urlRequestParamsPtr, Idempotency idemPotency);
 
         [DllImport(CronetLoader.Dll)]
+        internal static extern Idempotency Cronet_UrlRequestParams_idempotency_get(IntPtr urlRequestParamsPtr);
+        
+        [DllImport(CronetLoader.Dll)]
         [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(StringMarshaler))]
         internal static extern string Cronet_UrlRequestParams_http_method_get(IntPtr urlRequestParamsPtr);
         
@@ -93,8 +96,5 @@ namespace CronetSharp.Cronet
         
         [DllImport(CronetLoader.Dll)]
         internal static extern IntPtr Cronet_UrlRequestParams_request_finished_executor_get(IntPtr urlRequestParamsPtr);
-        
-        [DllImport(CronetLoader.Dll)]
-        internal static extern Idempotency Cronet_UrlRequestParams_idempotency_get(IntPtr urlRequestParamsPtr);
     }
 }

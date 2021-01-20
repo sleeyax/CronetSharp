@@ -51,7 +51,7 @@ namespace CronetSharp
         /// <param name="url"></param>
         /// <param name="callback"></param>
         /// <param name="executor"></param>
-        /// <param name="urlRequestParams"></param>
+        /// <param name="urlRequestParams">Readonly url request parameters</param>
         /// <returns></returns>
         public UrlRequest NewUrlRequest(string url, UrlRequestCallback callback, Executor executor, UrlRequestParams urlRequestParams)
         {
