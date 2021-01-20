@@ -11,7 +11,7 @@ namespace CronetSharp
         {
             Pointer = Cronet.UrlRequestParams.Cronet_UrlRequestParams_Create();
         }
-        
+
         public UrlRequestParams(IntPtr urlRequestParamsPtr)
         {
             Pointer = urlRequestParamsPtr;
@@ -29,21 +29,26 @@ namespace CronetSharp
         }
 
         /// <summary>
-        /// Set the request headers.
-        /// </summary>
-        /// <param name="headers"></param>
-        public void SetHeaders(IList<HttpHeader> headers)
-        {
-            foreach (var header in headers)
-                Cronet.UrlRequestParams.Cronet_UrlRequestParams_request_headers_add(Pointer, header.Pointer);
-        }
-        
-        /// <summary>
-        /// Set or get the headers.
+        /// Set or get the request headers.
         /// </summary>
         public IList<HttpHeader> Headers
         {
-            set => SetHeaders(value);
+            set
+            {
+                foreach (var header in value)
+                    Cronet.UrlRequestParams.Cronet_UrlRequestParams_request_headers_add(Pointer, header.Pointer);
+            }
+            get
+            {
+                var size = Cronet.UrlRequestParams.Cronet_UrlRequestParams_request_headers_size(Pointer);
+                var headers = new List<HttpHeader>();
+                for (uint i = 0; i < size; i++)
+                {
+                    var header = new HttpHeader(Cronet.UrlRequestParams.Cronet_UrlRequestParams_request_headers_at(Pointer, i));
+                    headers.Add(header);
+                }
+                return headers;
+            }
         }
 
         /// <summary>
@@ -82,6 +87,24 @@ namespace CronetSharp
         {
             get => Cronet.UrlRequestParams.Cronet_UrlRequestParams_priority_get(Pointer);
             set => Cronet.UrlRequestParams.Cronet_UrlRequestParams_priority_set(Pointer, value);
+        }
+
+        /// <summary>
+        /// Sets upload data provider.
+        /// </summary>
+        public UploadDataProvider UploadDataProvider
+        {
+            get => new UploadDataProvider(Cronet.UrlRequestParams.Cronet_UrlRequestParams_upload_data_provider_get(Pointer));
+            set => Cronet.UrlRequestParams.Cronet_UrlRequestParams_upload_data_provider_set(Pointer, value.Pointer);
+        }
+        
+        /// <summary>
+        /// Sets upload data provider engine.
+        /// </summary>
+        public Executor UploadDataProviderExecutor
+        {
+            get => new Executor(Cronet.UrlRequestParams.Cronet_UrlRequestParams_upload_data_provider_executor_get(Pointer));
+            set => Cronet.UrlRequestParams.Cronet_UrlRequestParams_upload_data_provider_executor_set(Pointer, value.Pointer);
         }
     }
 }

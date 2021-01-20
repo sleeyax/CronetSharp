@@ -58,14 +58,8 @@ namespace example
             var myUrlRequestCallback = new UrlRequestCallback(handler);
 
             // Create and configure a UrlRequest object
-            /*var requestBuilder = engine.NewUrlRequestBuilder("https://sleeyax.dev", myUrlRequestCallback, executor);
-            var urlRequest = requestBuilder
-                .SetHttpMethod("GET")
-                .SetPriority(RequestPriority.Highest)
-                .Build();
-            Console.WriteLine($"request priority : {requestBuilder.GetParams().Priority}");*/
-            // alternative syntax:
-            var urlRequestParams = new UrlRequestParams
+            // send GET request
+            var getRequestParams = new UrlRequestParams
             {
                 HttpMethod = "GET",
                 Priority = RequestPriority.Highest,
@@ -77,18 +71,29 @@ namespace example
                     // new HttpHeader("cookie", "foo=bar")
                 }
             };
-            var urlRequest = engine.NewUrlRequest("https://httpbin.org/anything", myUrlRequestCallback, executor, urlRequestParams);
-            Console.WriteLine($"request priority : {urlRequestParams.Priority}");
-            urlRequestParams.Destroy();
+            var getRequest = engine.NewUrlRequest("https://httpbin.org/anything", myUrlRequestCallback, executor, getRequestParams);
+            getRequestParams.Destroy();
 
-            Console.WriteLine("Starting request...");
-            urlRequest.Start();
+            Console.WriteLine("Starting GET request...");
+            getRequest.Start();
             // query status of the request (note: this is not a 'callback setter' so it will only log a value once)
-            urlRequest.GetStatus(status => Console.WriteLine($"Current request status: {status}"));
+            // getRequest.GetStatus(status => Console.WriteLine($"Current request status: {status}"));
+
+            // send POST request (using alternative builder syntax)
+            var postRequestBuilder = engine.NewUrlRequestBuilder("https://httpbin.org/anything", myUrlRequestCallback, executor)
+                .SetHttpMethod("POST")
+                .AddHeader("content-type", "application/json")
+                .AddHeader("my-custom-header", "customvalue")
+                .SetUploadDataProvider(UploadDataProvider.Create("{}"), executor);
+            var postRequest = postRequestBuilder.Build();
+            postRequestBuilder.GetParams().Destroy(); // free up now unnecessary resources from unmanaged memory
+            Console.WriteLine("Starting POST request...");
+            postRequest.Start();
 
             Console.WriteLine("Press any key to stop...");
             Console.ReadKey();
-            urlRequest.Destroy();
+            getRequest.Destroy();
+            postRequest.Destroy();
             engine.Shutdown();
             engine.Destroy();
         }
@@ -98,9 +103,10 @@ namespace example
             var engineParams  = new CronetEngineParams
             {
                 UserAgent = "CronetSample/1",
-                QuicEnabled = false,
+                BrotliEnabled = true,
             };
             var engine = new CronetEngine(engineParams);
+            engine.Start();
             engineParams.Destroy();
             return engine;
         }

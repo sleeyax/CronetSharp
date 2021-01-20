@@ -14,6 +14,9 @@ namespace CronetSharp
         public Action<UploadDataSink, ByteBuffer> Read;
         /// <summary>
         /// Rewinds upload data.
+        ///
+        /// This is mostly useful for chunked uploads.
+        /// E.g callback code resets index value to 0 in order to prepare for the next stream of uploaded chunks. 
         /// </summary>
         public Action<UploadDataSink> Rewind;
         /// <summary>

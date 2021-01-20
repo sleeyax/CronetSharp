@@ -94,6 +94,13 @@ namespace CronetSharp
             private readonly IntPtr _urlRequestPtr;
 
             private readonly UrlRequestParams _urlRequestParams;
+
+            /// <summary>
+            /// Function to execute when building is done.
+            ///
+            /// This finalizes the build and makes sure the UrlRequest uses the parameters we specified.
+            /// </summary>
+            private readonly Func<Cronet.EngineResult> _onInit;
             
             /// <summary>
             /// Builder for UrlRequests.
@@ -105,10 +112,11 @@ namespace CronetSharp
                 _urlRequestParams = new UrlRequestParams();
             }
             
-            public Builder(IntPtr urlRequestPtr, IntPtr urlRequestParamsPtr)
+            public Builder(IntPtr urlRequestPtr, IntPtr urlRequestParamsPtr, Func<Cronet.EngineResult> onInit)
             {
                 _urlRequestPtr = urlRequestPtr;
                 _urlRequestParams = new UrlRequestParams(urlRequestParamsPtr);
+                _onInit = onInit;
             }
 
             /// <summary>
@@ -117,6 +125,7 @@ namespace CronetSharp
             /// <returns></returns>
             public UrlRequest Build()
             {
+                _onInit?.Invoke();
                 return _urlRequestPtr != default ? new UrlRequest(_urlRequestPtr) : new UrlRequest();
             }
 
@@ -144,7 +153,7 @@ namespace CronetSharp
             /// <returns></returns>
             public Builder SetHeaders(IList<HttpHeader> headers)
             {
-                _urlRequestParams.SetHeaders(headers);
+                _urlRequestParams.Headers = headers;
                 return this;
             }
             
@@ -197,6 +206,18 @@ namespace CronetSharp
             public Builder SetPriority(Cronet.RequestPriority priority)
             {
                 _urlRequestParams.Priority = priority;
+                return this;
+            }
+
+            /// <summary>
+            /// Sets upload data provider.
+            /// </summary>
+            /// <param name="provider"></param>
+            /// <param name="executor"></param>
+            public Builder SetUploadDataProvider(UploadDataProvider provider, Executor executor = null)
+            {
+                _urlRequestParams.UploadDataProvider = provider;
+                if (executor != null) _urlRequestParams.UploadDataProviderExecutor = executor;
                 return this;
             }
         }

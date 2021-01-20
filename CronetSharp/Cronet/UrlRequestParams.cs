@@ -57,7 +57,7 @@ namespace CronetSharp.Cronet
         internal static extern uint Cronet_UrlRequestParams_request_headers_size(IntPtr urlRequestParamsPtr);
         
         [DllImport(CronetLoader.Dll)]
-        internal static extern uint Cronet_UrlRequestParams_request_headers_at(IntPtr urlRequestParamsPtr, uint index);
+        internal static extern IntPtr Cronet_UrlRequestParams_request_headers_at(IntPtr urlRequestParamsPtr, uint index);
         
         [DllImport(CronetLoader.Dll)]
         internal static extern void Cronet_UrlRequestParams_request_headers_clear(IntPtr urlRequestParamsPtr);

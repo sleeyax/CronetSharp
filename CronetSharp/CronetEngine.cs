@@ -33,7 +33,7 @@ namespace CronetSharp
             IntPtr urlRequestPtr = Cronet.UrlRequest.Cronet_UrlRequest_Create();
             IntPtr urlRequestParamsPtr = Cronet.UrlRequestParams.Cronet_UrlRequestParams_Create();
 
-            Cronet.EngineResult result = Cronet.UrlRequest.Cronet_UrlRequest_InitWithParams(
+            Func<Cronet.EngineResult> onInit = () => Cronet.UrlRequest.Cronet_UrlRequest_InitWithParams(
                 urlRequestPtr,
                 _enginePtr,
                 url,
@@ -42,7 +42,7 @@ namespace CronetSharp
                 executor.Pointer
             );
 
-            return new UrlRequest.Builder(urlRequestPtr, urlRequestParamsPtr);
+            return new UrlRequest.Builder(urlRequestPtr, urlRequestParamsPtr, onInit);
         }
         
         /// <summary>

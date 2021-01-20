@@ -15,6 +15,11 @@ namespace CronetSharp
             });
         }
 
+        public Executor(IntPtr executorPtr)
+        {
+            Pointer = executorPtr;
+        }
+
         public void Destroy()
         {
             Cronet.Executor.Cronet_Executor_Destroy(Pointer);
