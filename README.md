@@ -60,11 +60,11 @@ cronetEngine.Shutdown();
 cronetEngine.Destroy();
  ```
 
- Please note that this library is a little verbose. 
- You'll have to clean up unused reources in unmanaged memory yourself by calling `.Destroy()` on objects.
+ Please note that this library is built in an explicit way. 
+ You'll have to clean up unused resources in unmanaged memory yourself by calling `.Destroy()` on objects.
  The cronet engine also needs to be started manually with `.Start()`. 
  I've chosen to do this because it gives more control to the programmer. 
- However, this might change in the future.
+ This decision might change in the future though.
  
  ### Csharpified
  The typical 'builder pattern' that's overused by Google here can be simplified using C# object initializers.
@@ -86,6 +86,11 @@ UrlRequest request = cronetEngine.NewUrlRequest("https://example.com", myUrlRequ
     Priority = RequestPriority.Highest,
 });
 ```
+ 
+ ## Missing Features
+Below is a list of functionalities that exist in cronet but were not added to this library (yet).
+ * ClientContext (Cronet_ClientContext)
+ * Metrics
  
  ## Cronet
  Please see Google's [build instructions](https://chromium.googlesource.com/chromium/src/+/master/components/cronet/build_instructions.md) in order to build cronet from source.
