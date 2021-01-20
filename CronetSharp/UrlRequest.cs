@@ -188,15 +188,7 @@ namespace CronetSharp
             /// </summary>
             public Builder SetHttpMethod(string method)
             {
-                string[] supported = {"GET", "HEAD", "DELETE", "POST", "PUT"};
-                
-                method = method.ToUpper();
-                
-                if (!supported.Contains(method))
-                    throw new ArgumentException($"Method {method} is not supported! Must be one of {string.Join(", ", supported)}"); 
-                
                 _urlRequestParams.HttpMethod = method;
-
                 return this;
             }
 
