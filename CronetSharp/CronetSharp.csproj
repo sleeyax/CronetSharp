@@ -6,13 +6,16 @@
     </PropertyGroup>
     
     <ItemGroup>
-      <Content Include="CronetAsm\Win32\cronet.dll">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
-      <Content Include="CronetAsm\Win64\cronet.dll">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
       <None Remove="cronet64.dll" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <Content Include="Cronet\Asm\Win32\cronet.dll">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <Content Include="Cronet\Asm\Win64\cronet.dll">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
 </Project>

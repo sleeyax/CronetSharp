@@ -10,7 +10,7 @@
 // Load cronet dll
 // You can create your own DLL loader by inheriting from 'CronetLoader' (recommended) or by implementing 'ILoader' (advanced) 
 ILoader loader = new CronetLoader();
-loader.Load();
+loader.Load(Path.Combine("Cronet", "Asm"));
 
 // Create and configure an instance of CronetEngine
 CronetEngine.Builder myBuilder = new CronetEngine.Builder();

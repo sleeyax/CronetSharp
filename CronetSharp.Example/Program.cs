@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using CronetSharp;
 using CronetSharp.Cronet;
-using CronetSharp.CronetAsm;
+using CronetSharp.Cronet.Asm;
 
 namespace example
 {
@@ -12,7 +13,7 @@ namespace example
         {
             // load dll
             ILoader loader = new CronetLoader();
-            loader.Load();
+            loader.Load(Path.Combine("Cronet", "Asm"));
 
             // create & start cronet engine
             var engine = CreateEngine();
