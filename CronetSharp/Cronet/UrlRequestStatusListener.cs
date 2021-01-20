@@ -4,7 +4,7 @@ using CronetSharp.Cronet.Asm;
 
 namespace CronetSharp.Cronet
 {
-    internal class UrlRequestStatusListener
+    internal static class UrlRequestStatusListener
     {
         internal delegate void OnStatusFunc(IntPtr urlRequestStatusListenerPtr, UrlRequestStatus status);
 

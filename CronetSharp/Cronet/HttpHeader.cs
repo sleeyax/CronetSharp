@@ -5,7 +5,7 @@ using CronetSharp.Cronet.Marshalers;
 
 namespace CronetSharp.Cronet
 {
-    internal class HttpHeader
+    internal static class HttpHeader
     {
         [DllImport(CronetLoader.Dll)]
         internal static extern IntPtr Cronet_HttpHeader_Create();

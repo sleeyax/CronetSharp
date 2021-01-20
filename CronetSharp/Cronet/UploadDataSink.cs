@@ -4,7 +4,7 @@ using CronetSharp.Cronet.Asm;
 
 namespace CronetSharp.Cronet
 {
-    internal class UploadDataSink
+    internal static class UploadDataSink
     {
         internal delegate void OnReadSucceededFunc(IntPtr uploadDataSinkPtr, ulong bytesRead, bool isFinalChunk);
         internal delegate void OnReadErrorFunc(IntPtr uploadDataSinkPtr, string error);

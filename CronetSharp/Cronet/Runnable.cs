@@ -4,7 +4,7 @@ using CronetSharp.Cronet.Asm;
 
 namespace CronetSharp.Cronet
 {
-    internal class Runnable
+    internal static class Runnable
     {
         internal delegate void RunFunc(IntPtr runnablePtr);
 

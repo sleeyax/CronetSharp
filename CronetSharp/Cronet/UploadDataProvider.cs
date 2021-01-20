@@ -4,7 +4,7 @@ using CronetSharp.Cronet.Asm;
 
 namespace CronetSharp.Cronet
 {
-    internal class UploadDataProvider
+    internal static class UploadDataProvider
     {
         internal delegate long GetLengthFunc(IntPtr uploadDataProviderPtr);
         internal delegate void ReadFunc(IntPtr uploadDataProviderPtr, IntPtr uploadDataSinkPtr, IntPtr bufferPtr);
