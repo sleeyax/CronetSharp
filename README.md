@@ -15,6 +15,7 @@ loader.Load();
 // Create and configure an instance of CronetEngine
 CronetEngine.Builder myBuilder = new CronetEngine.Builder();
 CronetEngine cronetEngine = myBuilder.Build();
+cronetEngine.Start();
 
 // Provide an implementation of the request callback
 var myUrlRequestCallback = new UrlRequestCallback(new UrlRequestCallbackHandler
@@ -58,6 +59,12 @@ request.Destroy();
 cronetEngine.Shutdown();
 cronetEngine.Destroy();
  ```
+
+ Please note that this library is a little verbose. 
+ You'll have to clean up unused reources in unmanaged memory yourself by calling `.Destroy()` on objects.
+ The cronet engine also needs to be started manually with `.Start()`. 
+ I've chosen to do this because it gives more control to the programmer. 
+ However, this might change in the future.
  
  ### Csharpified
  The typical 'builder pattern' that's overused by Google here can be simplified using C# object initializers.
@@ -81,7 +88,7 @@ UrlRequest request = cronetEngine.NewUrlRequest("https://example.com", myUrlRequ
 ```
  
  ## Cronet
- Please see [Googles build instructions](https://chromium.googlesource.com/chromium/src/+/master/components/cronet/build_instructions.md) in order to build cronet from source.
+ Please see Google's [build instructions](https://chromium.googlesource.com/chromium/src/+/master/components/cronet/build_instructions.md) in order to build cronet from source.
  
  ### Build
  Always execute any of the commands below under `chromium/src`.

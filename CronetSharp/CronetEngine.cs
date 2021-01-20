@@ -11,14 +11,12 @@ namespace CronetSharp
         {
             _enginePtr = Cronet.Engine.Cronet_Engine_Create();
             _engineParamsPtr = Cronet.EngineParams.Cronet_EngineParams_Create();
-            Start();
         }
 
         public CronetEngine(CronetEngineParams engineParams)
         {
             _enginePtr = Cronet.Engine.Cronet_Engine_Create();
             _engineParamsPtr = engineParams.Pointer;
-            Start();
         }
 
         /// <summary>
