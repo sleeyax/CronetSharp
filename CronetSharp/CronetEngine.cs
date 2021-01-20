@@ -238,12 +238,46 @@ namespace CronetSharp
             /// Overrides the Accept-Language header for all requests.
             /// An explicitly set Accept-Language header (set using addHeader(String, String)) will override a value set using this function.
             /// </summary>
-            /// <param name="userAgent">the accept-language string to use for all requests.</param>
-            /// <param name="acceptLanguage"></param>
+            /// <param name="acceptLanguage">the accept-language string to use for all requests.</param>
             /// <returns></returns>
             public Builder SetAcceptLanguage(string acceptLanguage)
             {
                 _engineParams.AcceptLanguage = acceptLanguage;
+                return this;
+            }
+
+            /// <summary>
+            /// Disable runtime CHECK of the result
+            /// </summary>
+            /// <param name="disable"></param>
+            /// <returns></returns>
+            public Builder DisableCheckResult(bool disable = true)
+            {
+                _engineParams.CheckResultEnabled = !disable;
+                return this;
+            }
+
+            /// <summary>
+            /// Sets experimental cronet options.
+            /// You can provide Chromium flags in JSON format.
+            /// For more information, see Chromium/Chrome documentation.
+            /// </summary>
+            /// <param name="options"></param>
+            /// <returns></returns>
+            public Builder SetExperimentalOptions(string options)
+            {
+                _engineParams.ExperimentalOptions = options;
+                return this;
+            }
+
+            /// <summary>
+            /// Sets thread priority.
+            /// </summary>
+            /// <param name="threadPriority"></param>
+            /// <returns></returns>
+            public Builder SetThreadPriority(double threadPriority)
+            {
+                _engineParams.ThreadPriority = threadPriority;
                 return this;
             }
         }

@@ -99,5 +99,32 @@ namespace CronetSharp
             get => Cronet.EngineParams.Cronet_EngineParams_accept_language_get(Pointer);
             set => Cronet.EngineParams.Cronet_EngineParams_accept_language_set(Pointer, value);
         }
+
+        /// <summary>
+        /// Enable runtime CHECK of the result.
+        /// </summary>
+        public bool CheckResultEnabled
+        {
+            get => Cronet.EngineParams.Cronet_EngineParams_enable_check_result_get(Pointer);
+            set => Cronet.EngineParams.Cronet_EngineParams_enable_check_result_set(Pointer, value);
+        }
+
+        /// <summary>
+        /// Sets experimental cronet options.
+        /// </summary>
+        public string ExperimentalOptions
+        {
+            get => Cronet.EngineParams.Cronet_EngineParams_experimental_options_get(Pointer);
+            set => Cronet.EngineParams.Cronet_EngineParams_experimental_options_set(Pointer, value);
+        }
+
+        /// <summary>
+        /// Sets thread priority.
+        /// </summary>
+        public double ThreadPriority
+        {
+            get => Cronet.EngineParams.Cronet_EngineParams_network_thread_priority_get(Pointer);
+            set => Cronet.EngineParams.Cronet_EngineParams_network_thread_priority_set(Pointer, value);
+        }
     }
 }
