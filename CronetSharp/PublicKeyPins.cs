@@ -55,9 +55,7 @@ namespace CronetSharp
             set
             {
                 foreach (var pin in value)
-                {
                     AddPin(pin);
-                }
             }
             
         }

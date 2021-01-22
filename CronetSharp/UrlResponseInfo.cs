@@ -40,9 +40,7 @@ namespace CronetSharp
             set
             {
                 foreach (var header in value)
-                {
                     Cronet.UrlResponseInfo.Cronet_UrlResponseInfo_all_headers_list_add(_urlResponseInfoPtr, header.Pointer);
-                }
             }
         }
 
@@ -120,13 +118,22 @@ namespace CronetSharp
         /// <value></value>
         public IList<string> UrlChain
         {
-            // TODO: get & set whole chain (we can probably use .size() in a while/for loop to get every item in the chain)
             get
             {
-                string firstChain = Cronet.UrlResponseInfo.Cronet_UrlResponseInfo_url_chain_at(_urlResponseInfoPtr, 0);
-                return new List<string> {firstChain};
+                var chains = new List<string>();
+                var size = Cronet.UrlResponseInfo.Cronet_UrlResponseInfo_url_chain_size(_urlResponseInfoPtr);
+                for (uint i = 0; i < size; i++)
+                {
+                    var chain = Cronet.UrlResponseInfo.Cronet_UrlResponseInfo_url_chain_at(_urlResponseInfoPtr, i);
+                    chains.Add(chain);
+                }
+                return chains;
             }
-            set => Cronet.UrlResponseInfo.Cronet_UrlResponseInfo_url_chain_add(_urlResponseInfoPtr, value[0]);
+            set
+            {
+                foreach (string chain in value)
+                    Cronet.UrlResponseInfo.Cronet_UrlResponseInfo_url_chain_add(_urlResponseInfoPtr, chain);
+            }
         }
 
         /// <summary>
