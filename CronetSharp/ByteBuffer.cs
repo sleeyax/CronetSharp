@@ -53,6 +53,18 @@ namespace CronetSharp
         }
 
         /// <summary>
+        /// Clear the buffer's contents.
+        ///
+        /// This method won't destroy the buffer.
+        /// </summary>
+        public void Clear()
+        {
+            IntPtr dest = Cronet.Buffer.Cronet_Buffer_GetData(Pointer);
+            int size = (int) Cronet.Buffer.Cronet_Buffer_GetSize(Pointer);
+            Marshal.Copy(new byte[size], 0, dest, size);
+        }
+
+        /// <summary>
         /// Read buffer contents as string.
         /// </summary>
         /// <returns></returns>

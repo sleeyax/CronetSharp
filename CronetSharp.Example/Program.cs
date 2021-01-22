@@ -39,8 +39,8 @@ namespace example
                 {
                     Console.WriteLine("-> read completed");
                     Console.WriteLine(byteBuffer.GetDataAsString());
-                    byteBuffer.Destroy(); // TODO: bytebuffer.clear() & reuse same bytebuffer?
-                    request.Read(ByteBuffer.Allocate(102400));
+                    byteBuffer.Clear();
+                    request.Read(byteBuffer);
                 },
                 OnSucceeded = (request, info) =>
                 {
