@@ -118,6 +118,24 @@ namespace CronetSharp
         }
 
         /// <summary>
+        /// Set request finished info listener.
+        /// </summary>
+        public RequestFinishedInfoListener RequestFinishedInfoListener
+        {
+            get => new RequestFinishedInfoListener(Cronet.UrlRequestParams.Cronet_UrlRequestParams_request_finished_listener_get(Pointer));
+            set => Cronet.UrlRequestParams.Cronet_UrlRequestParams_request_finished_listener_set(Pointer, value.Pointer);
+        }
+
+        /// <summary>
+        /// Set the executor to use for the request finished info listener.
+        /// </summary>
+        public Executor RequestFinishedInfoListenerExecutor
+        {
+            get => new Executor(Cronet.UrlRequestParams.Cronet_UrlRequestParams_request_finished_executor_get(Pointer));
+            set => Cronet.UrlRequestParams.Cronet_UrlRequestParams_request_finished_executor_set(Pointer, value.Pointer);
+        }
+
+        /// <summary>
         /// Remove all headers
         /// </summary>
         public void ClearHeaders()

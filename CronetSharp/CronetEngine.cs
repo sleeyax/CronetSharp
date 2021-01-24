@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using DateTime = System.DateTime;
 
 namespace CronetSharp
@@ -19,6 +18,18 @@ namespace CronetSharp
         {
             _enginePtr = Cronet.Engine.Cronet_Engine_Create();
             _engineParamsPtr = engineParams.Pointer;
+        }
+
+        /// <summary>
+        /// Factory method that creates and starts a new Cronet Engine
+        /// </summary>
+        /// <param name="engineParams"></param>
+        /// <returns></returns>
+        public static CronetEngine CreateAndStart(CronetEngineParams engineParams = null)
+        {
+            var engine = engineParams != null ? new CronetEngine(engineParams) : new CronetEngine();
+            engine.Start();
+            return engine;
         }
 
         /// <summary>

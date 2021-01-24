@@ -2,7 +2,7 @@
 
 namespace CronetSharp
 {
-    public class UrlRequestCallback
+    public class UrlRequestCallback : IDisposable
     {
         public IntPtr Pointer { get; }
         
@@ -16,6 +16,11 @@ namespace CronetSharp
                 (urlRequestCallbackPtr, urlRequestPtr, urlResponseInfoPtr, errorPtr) => handler.OnFailed(new UrlRequest(urlRequestPtr), new UrlResponseInfo(urlResponseInfoPtr), new CronetException(errorPtr)),
                 (urlRequestCallbackPtr, urlRequestPtr, urlResponseInfoPtr) => handler.OnCancelled(new UrlRequest(urlRequestPtr), new UrlResponseInfo(urlResponseInfoPtr))
             );
+        }
+
+        public void Dispose()
+        {
+            Cronet.UrlRequestCallback.Cronet_UrlRequestCallback_Destroy(Pointer);
         }
     }
 }

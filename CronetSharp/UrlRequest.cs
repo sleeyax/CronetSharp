@@ -224,6 +224,21 @@ namespace CronetSharp
                 _urlRequestParams.Idempotency = idempotency;
                 return this;
             }
+
+            /// <summary>
+            /// Set request finished info listener.
+            ///
+            /// Warning: the listener will only be called when metrics are set.
+            /// </summary>
+            /// <param name="listener"></param>
+            /// <param name="executor"></param>
+            /// <returns></returns>
+            public Builder SetRequestFinishedInfoListener(RequestFinishedInfoListener listener, Executor executor)
+            {
+                _urlRequestParams.RequestFinishedInfoListener = listener;
+                _urlRequestParams.RequestFinishedInfoListenerExecutor = executor;
+                return this;
+            }
         }
     }
 }
