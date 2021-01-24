@@ -12,8 +12,8 @@ namespace example
         static void Main(string[] args)
         {
             // load dll
-            ILoader loader = new CronetLoader();
-            loader.Load(Path.Combine("Cronet", "Asm"));
+            var loader = new CronetLoader();
+            loader.Load();
 
             // create & start cronet engine
             var engine = CreateEngine();
