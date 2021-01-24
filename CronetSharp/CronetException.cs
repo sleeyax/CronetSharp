@@ -2,7 +2,7 @@
 
 namespace CronetSharp
 {
-    public class CronetException : Exception
+    public class CronetException : Exception, IDisposable
     {
         private readonly IntPtr _errorPtr;
         
@@ -16,7 +16,7 @@ namespace CronetSharp
             _errorPtr = errorPtr;
         }
 
-        public void Destroy()
+        public void Dispose()
         {
             Cronet.Error.Cronet_Error_Destroy(_errorPtr);    
         }

@@ -5,7 +5,7 @@ using CronetSharp.Cronet;
 
 namespace CronetSharp
 {
-    public class UrlRequest
+    public class UrlRequest : IDisposable
     {
         private readonly IntPtr _urlRequestPtr;
 
@@ -19,7 +19,7 @@ namespace CronetSharp
             _urlRequestPtr = urlRequestPtr;
         }
 
-        public void Destroy()
+        public void Dispose()
         {
             Cronet.UrlRequest.Cronet_UrlRequest_Destroy(_urlRequestPtr);
         }

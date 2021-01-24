@@ -2,7 +2,7 @@
 
 namespace CronetSharp
 {
-    public class QuicHint
+    public class QuicHint : IDisposable
     {
         public IntPtr Pointer { get; }
         
@@ -24,7 +24,7 @@ namespace CronetSharp
             AlternatePort = alternatePort;
         }
 
-        public void Destroy()
+        public void Dispose()
         {
             Cronet.QuicHint.Cronet_QuicHint_Destroy(Pointer);
         }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace CronetSharp
 {
-    public class PublicKeyPins
+    public class PublicKeyPins : IDisposable
     {
         public IntPtr Pointer { get; }
         
@@ -26,7 +26,7 @@ namespace CronetSharp
             ExpirationDate = (long) (expirationDate - new DateTime(1970, 1, 1)).TotalSeconds;
         }
 
-        public void Destroy()
+        public void Dispose()
         {
             Cronet.PublicKeyPins.Cronet_PublicKeyPins_Destroy(Pointer);
         }

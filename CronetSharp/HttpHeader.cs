@@ -2,7 +2,7 @@
 
 namespace CronetSharp
 {
-    public class HttpHeader
+    public class HttpHeader : IDisposable
     {
         public IntPtr Pointer { get; }
 
@@ -23,7 +23,7 @@ namespace CronetSharp
             Value = value;
         }
 
-        public void Destroy()
+        public void Dispose()
         {
             Cronet.HttpHeader.Cronet_HttpHeader_Destroy(Pointer);
         }

@@ -2,6 +2,7 @@ using NUnit.Framework;
 
 namespace CronetSharp.Tests
 {
+    [TestFixture]
     public class ByteBufferTest : SetupCronet
     {
         private ulong _byteBufferSize;
@@ -16,20 +17,18 @@ namespace CronetSharp.Tests
         [Test]
         public void TestBufferSizeAllocation()
         {
-            var buffer = new ByteBuffer(_byteBufferSize);
-            var bufferData = buffer.GetData();
-            Assert.AreEqual(_byteBufferSize, bufferData.Length);
+            using var buffer = new ByteBuffer(_byteBufferSize);
+            byte[] data = buffer.GetData();
+            Assert.AreEqual(_byteBufferSize, data.Length);
             Assert.AreEqual(_byteBufferSize, buffer.GetSize());
-            buffer.Destroy();
         }
 
         [Test]
         public void TestBufferContentsTheSame()
         {
             byte[] data = Helpers.GenRandomBytes((int) _byteBufferSize);
-            var buffer = new ByteBuffer(_byteBufferSize, data);
+            using var buffer = new ByteBuffer(_byteBufferSize, data);
             Assert.AreEqual(data, buffer.GetData());
-            buffer.Destroy();
         }
 
         [Test]
@@ -38,7 +37,7 @@ namespace CronetSharp.Tests
             byte[] data = Helpers.GenRandomBytes((int) _byteBufferSize);
             bool destroyed = false;
             var buffer = new ByteBuffer(_byteBufferSize, data, new ByteBufferCallback(_ => destroyed = true));
-            buffer.Destroy();
+            buffer.Dispose();
             Assert.AreEqual(true, destroyed);
         }
 
@@ -46,11 +45,10 @@ namespace CronetSharp.Tests
         public void TestBufferIsClearable()
         {
             byte[] empty = new byte[_byteBufferSize];
-            var buffer = new ByteBuffer(_byteBufferSize, Helpers.GenRandomBytes((int) _byteBufferSize));
+            using var buffer = new ByteBuffer(_byteBufferSize, Helpers.GenRandomBytes((int) _byteBufferSize));
             Assert.AreNotEqual(empty, buffer.GetData());
             buffer.Clear();
             Assert.AreEqual(empty, buffer.GetData());
-            buffer.Destroy();
         }
     }
 }

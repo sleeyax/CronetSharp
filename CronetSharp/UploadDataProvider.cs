@@ -9,7 +9,7 @@ namespace CronetSharp
     /// It supports both non-chunked (size known in advanced) and chunked (size not known in advance) uploads.
     /// Be aware that not all servers support chunked uploads. 
     /// </summary>
-    public class UploadDataProvider
+    public class UploadDataProvider : IDisposable
     {
         public IntPtr Pointer { get; }
         
@@ -28,7 +28,7 @@ namespace CronetSharp
             Pointer = uploadDataProviderPtr;
         }
 
-        public void Destroy()
+        public void Dispose()
         {
             Cronet.UploadDataProvider.Cronet_UploadDataProvider_Destroy(Pointer);
         }

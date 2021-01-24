@@ -3,7 +3,7 @@ using CronetSharp.Cronet;
 
 namespace CronetSharp
 {
-    public class RequestFinishedInfo
+    public class RequestFinishedInfo : IDisposable
     {
         private readonly IntPtr _requestFinishedInfoPtr;
 
@@ -17,7 +17,7 @@ namespace CronetSharp
             _requestFinishedInfoPtr = requestFinishedInfoPtr;
         }
 
-        public void Destroy()
+        public void Dispose()
         {
             Cronet.RequestFinishedInfo.Cronet_RequestFinishedInfo_Destroy(_requestFinishedInfoPtr);
         }

@@ -2,7 +2,7 @@
 
 namespace CronetSharp
 {
-    public class UploadDataSink
+    public class UploadDataSink : IDisposable
     {
         private readonly IntPtr _uploadDataSinkPtr;
         
@@ -26,7 +26,7 @@ namespace CronetSharp
             );
         }
 
-        public void Destroy()
+        public void Dispose()
         {
             Cronet.UploadDataSink.Cronet_UploadDataSink_Destroy(_uploadDataSinkPtr);
         }

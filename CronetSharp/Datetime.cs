@@ -2,7 +2,7 @@
 
 namespace CronetSharp
 {
-    public class Datetime
+    public class Datetime : IDisposable
     {
         private readonly IntPtr _dateTimePtr;
 
@@ -17,7 +17,7 @@ namespace CronetSharp
             Value = value;
         }
 
-        public void Destroy()
+        public void Dispose()
         {
             Cronet.DateTime.Cronet_DateTime_Destroy(_dateTimePtr);
         }

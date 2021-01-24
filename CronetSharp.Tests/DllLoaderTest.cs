@@ -1,10 +1,10 @@
 ﻿using System;
-using System.IO;
 using CronetSharp.Cronet.Asm;
 using NUnit.Framework;
 
 namespace CronetSharp.Tests
 {
+    [TestFixture]
     public class FullyCustomizedDllLoader : ILoader
     {
         public bool loaded;

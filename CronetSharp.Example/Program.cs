@@ -73,7 +73,7 @@ namespace example
                 }
             };
             var getRequest = engine.NewUrlRequest("https://httpbin.org/anything", myUrlRequestCallback, executor, getRequestParams);
-            getRequestParams.Destroy();
+            getRequestParams.Dispose();
 
             Console.WriteLine("Starting GET request...");
             getRequest.Start();
@@ -87,28 +87,27 @@ namespace example
                 .AddHeader("my-custom-header", "customvalue")
                 .SetUploadDataProvider(UploadDataProvider.Create("{}"), executor);
             var postRequest = postRequestBuilder.Build();
-            postRequestBuilder.GetParams().Destroy(); // free up now unnecessary resources from unmanaged memory
+            postRequestBuilder.GetParams().Dispose(); // free up now unnecessary resources from unmanaged memory
             Console.WriteLine("Starting POST request...");
             postRequest.Start();
 
             Console.WriteLine("Press any key to stop...");
             Console.ReadKey();
-            getRequest.Destroy();
-            postRequest.Destroy();
+            getRequest.Dispose();
+            postRequest.Dispose();
             engine.Shutdown();
-            engine.Destroy();
+            engine.Dispose();
         }
 
         static CronetEngine CreateEngine()
         {
-            var engineParams  = new CronetEngineParams
+            using var engineParams = new CronetEngineParams
             {
                 UserAgent = "CronetSample/1",
                 BrotliEnabled = true,
             };
             var engine = new CronetEngine(engineParams);
             engine.Start();
-            engineParams.Destroy();
             return engine;
         }
     }

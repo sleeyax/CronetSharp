@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace CronetSharp
 {
-    public class CronetEngineParams
+    public class CronetEngineParams : IDisposable
     {
         public IntPtr Pointer { get; }
         
@@ -15,7 +15,7 @@ namespace CronetSharp
         /// <summary>
         /// Destroy the CronetEngineParams and free up memory.
         /// </summary>
-        public void Destroy()
+        public void Dispose()
         {
             Cronet.EngineParams.Cronet_EngineParams_Destroy(Pointer);
         }

@@ -10,7 +10,7 @@
 // Load cronet dll
 // You can create your own DLL loader by inheriting from 'CronetLoader' (recommended) or by implementing 'ILoader' (advanced) 
 ILoader loader = new CronetLoader();
-loader.Load(Path.Combine("Cronet", "Asm"));
+loader.Load("/absolute/path/to/dir/containing/cronet/dll");
 
 // Create and configure an instance of CronetEngine
 CronetEngine.Builder myBuilder = new CronetEngine.Builder();
@@ -54,14 +54,14 @@ request.Start();
 // Our c# code  continues here ...
 Console.ReadKey();
 // Cleanup & Free memory
-executor.Destroy();
-request.Destroy();
+executor.Dispose();
+request.Dispose();
 cronetEngine.Shutdown();
-cronetEngine.Destroy();
+cronetEngine.Dispose();
  ```
 
  Please note that this library is built in an explicit way. 
- You'll have to clean up unused resources in unmanaged memory yourself by calling `.Destroy()` on objects.
+ You'll have to clean up unused resources in unmanaged memory yourself by calling `.Dispose()` on objects or by wrapping them in `using` blocks.
  The cronet engine also needs to be started manually with `.Start()`. 
  I've chosen to do this because it gives more control to the programmer. 
  This decision might change in the future though.

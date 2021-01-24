@@ -4,7 +4,7 @@ using CronetSharp.Cronet;
 
 namespace CronetSharp
 {
-    public class UrlRequestParams
+    public class UrlRequestParams : IDisposable
     {
         public IntPtr Pointer { get; }
 
@@ -18,7 +18,7 @@ namespace CronetSharp
             Pointer = urlRequestParamsPtr;
         }
 
-        public void Destroy()
+        public void Dispose()
         {
             Cronet.UrlRequestParams.Cronet_UrlRequestParams_Destroy(Pointer);
         }

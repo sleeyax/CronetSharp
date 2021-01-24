@@ -4,6 +4,7 @@
         <OutputType>Exe</OutputType>
         <TargetFramework>net48</TargetFramework>
         <RootNamespace>example</RootNamespace>
+        <LangVersion>8</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>

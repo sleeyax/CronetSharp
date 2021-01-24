@@ -2,7 +2,7 @@
 
 namespace CronetSharp
 {
-    public class RequestFinishedInfoListener
+    public class RequestFinishedInfoListener : IDisposable
     {
         private readonly IntPtr _requestFinishedInfoListener;
 
@@ -13,7 +13,7 @@ namespace CronetSharp
             );
         }
 
-        public void Destroy()
+        public void Dispose()
         {
             Cronet.RequestFinishedInfoListener.Cronet_RequestFinishedInfoListener_Destroy(_requestFinishedInfoListener);
         }

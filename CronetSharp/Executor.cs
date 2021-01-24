@@ -2,7 +2,7 @@
 
 namespace CronetSharp
 {
-    public class Executor
+    public class Executor : IDisposable
     {
         public IntPtr Pointer { get; }
         
@@ -20,7 +20,7 @@ namespace CronetSharp
             Pointer = executorPtr;
         }
 
-        public void Destroy()
+        public void Dispose()
         {
             Cronet.Executor.Cronet_Executor_Destroy(Pointer);
         }

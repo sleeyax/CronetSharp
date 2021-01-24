@@ -2,7 +2,7 @@
 
 namespace CronetSharp
 {
-    public class ByteBufferCallback
+    public class ByteBufferCallback : IDisposable
     {
         public IntPtr Pointer { get; }
         
@@ -16,7 +16,7 @@ namespace CronetSharp
             Pointer = byteBufferCallbackPtr;
         }
 
-        public void Destroy()
+        public void Dispose()
         {
             Cronet.BufferCallback.Cronet_BufferCallback_Destroy(Pointer);
         }

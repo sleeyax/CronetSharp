@@ -4,7 +4,7 @@ using CronetSharp.Cronet.Marshalers;
 
 namespace CronetSharp
 {
-    public class ByteBuffer
+    public class ByteBuffer : IDisposable
     {
         public IntPtr Pointer { get; }
 
@@ -47,7 +47,7 @@ namespace CronetSharp
         /// <summary>
         /// Destroy this buffer and free up memory.
         /// </summary>
-        public void Destroy()
+        public void Dispose()
         {
             Cronet.Buffer.Cronet_Buffer_Destroy(Pointer);
         }
