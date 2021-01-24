@@ -1,39 +1,55 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace CronetSharp
 {
     public class PublicKeyPins
     {
-        private readonly IntPtr _publicKeyPinsPtr;
+        public IntPtr Pointer { get; }
         
         public PublicKeyPins()
         {
-            _publicKeyPinsPtr = Cronet.PublicKeyPins.Cronet_PublicKeyPins_Create();
+            Pointer = Cronet.PublicKeyPins.Cronet_PublicKeyPins_Create();
+        }
+
+        public PublicKeyPins(IntPtr publicKeyPinsPointer)
+        {
+            Pointer = publicKeyPinsPointer;
+        }
+        
+        public PublicKeyPins(string hostname, IList<string> pinsSha256, bool includeSubdomains, DateTime expirationDate)
+        {
+            Pointer = Cronet.PublicKeyPins.Cronet_PublicKeyPins_Create();
+            Host = hostname;
+            Pins = pinsSha256;
+            IncludeSubdomains = includeSubdomains;
+            ExpirationDate = (long) (expirationDate - new DateTime(1970, 1, 1)).TotalSeconds;
         }
 
         public void Destroy()
         {
-            Cronet.PublicKeyPins.Cronet_PublicKeyPins_Destroy(_publicKeyPinsPtr);
+            Cronet.PublicKeyPins.Cronet_PublicKeyPins_Destroy(Pointer);
         }
 
         public string Host
         {
-            get => Cronet.PublicKeyPins.Cronet_PublicKeyPins_host_get(_publicKeyPinsPtr);
-            set => Cronet.PublicKeyPins.Cronet_PublicKeyPins_host_set(_publicKeyPinsPtr, value);
+            get => Cronet.PublicKeyPins.Cronet_PublicKeyPins_host_get(Pointer);
+            set => Cronet.PublicKeyPins.Cronet_PublicKeyPins_host_set(Pointer, value);
         }
 
         public bool IncludeSubdomains
         {
-            get => Cronet.PublicKeyPins.Cronet_PublicKeyPins_include_subdomains_get(_publicKeyPinsPtr);
-            set => Cronet.PublicKeyPins.Cronet_PublicKeyPins_include_subdomains_set(_publicKeyPinsPtr, value);
+            get => Cronet.PublicKeyPins.Cronet_PublicKeyPins_include_subdomains_get(Pointer);
+            set => Cronet.PublicKeyPins.Cronet_PublicKeyPins_include_subdomains_set(Pointer, value);
         }
 
+        /// <summary>
+        /// Set expiration date (number of milliseconds since epoch)
+        /// </summary>
         public long ExpirationDate
         {
-            get => Cronet.PublicKeyPins.Cronet_PublicKeyPins_expiration_date_get(_publicKeyPinsPtr);
-            set => Cronet.PublicKeyPins.Cronet_PublicKeyPins_expiration_date_set(_publicKeyPinsPtr, value);
+            get => Cronet.PublicKeyPins.Cronet_PublicKeyPins_expiration_date_get(Pointer);
+            set => Cronet.PublicKeyPins.Cronet_PublicKeyPins_expiration_date_set(Pointer, value);
         }
 
         /// <summary>
@@ -44,10 +60,10 @@ namespace CronetSharp
             get
             { 
                 var pins = new List<string>();
-                var size = Cronet.PublicKeyPins.Cronet_PublicKeyPins_pins_sha256_size(_publicKeyPinsPtr);
+                var size = Cronet.PublicKeyPins.Cronet_PublicKeyPins_pins_sha256_size(Pointer);
                 for (uint i = 0; i < size; i++)
                 {
-                    var pin = Cronet.PublicKeyPins.Cronet_PublicKeyPins_pins_sha256_at(_publicKeyPinsPtr, i);
+                    var pin = Cronet.PublicKeyPins.Cronet_PublicKeyPins_pins_sha256_at(Pointer, i);
                     pins.Add(pin);
                 }
                 return pins;
@@ -66,7 +82,7 @@ namespace CronetSharp
         /// <param name="sha256"></param>
         public void AddPin(string sha256)
         {
-            Cronet.PublicKeyPins.Cronet_PublicKeyPins_pins_sha256_add(_publicKeyPinsPtr, sha256);
+            Cronet.PublicKeyPins.Cronet_PublicKeyPins_pins_sha256_add(Pointer, sha256);
         }
 
         /// <summary>
@@ -74,7 +90,7 @@ namespace CronetSharp
         /// </summary>
         public void ClearPins()
         {
-            Cronet.PublicKeyPins.Cronet_PublicKeyPins_pins_sha256_clear(_publicKeyPinsPtr);
+            Cronet.PublicKeyPins.Cronet_PublicKeyPins_pins_sha256_clear(Pointer);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace CronetSharp
 {
@@ -17,6 +18,39 @@ namespace CronetSharp
         public void Destroy()
         {
             Cronet.EngineParams.Cronet_EngineParams_Destroy(Pointer);
+        }
+
+        /// <summary>
+        ///  Set public key pins to use 
+        /// </summary>
+        public IList<PublicKeyPins> PublicKeyPins
+        {
+            get
+            {
+                var publicKeyPins = new List<PublicKeyPins>();
+
+                var size = Cronet.EngineParams.Cronet_EngineParams_public_key_pins_size(Pointer);
+                for (uint i = 0; i < size; i++)
+                {
+                    var publicKeyPinPointer = Cronet.EngineParams.Cronet_EngineParams_public_key_pins_at(Pointer, i);
+                    publicKeyPins.Add(new PublicKeyPins(publicKeyPinPointer));
+                }
+
+                return publicKeyPins;
+            }
+            set
+            {
+                foreach (var publicKeyPins in value)
+                    AddPublicKeyPins(publicKeyPins);
+            }
+        }
+
+        /// <summary>
+        ///  Pins a set of public keys for a given host.
+        /// </summary>
+        public void AddPublicKeyPins(PublicKeyPins publicKeyPins)
+        {
+            Cronet.EngineParams.Cronet_EngineParams_public_key_pins_add(Pointer, publicKeyPins.Pointer);
         }
 
         /// <summary>

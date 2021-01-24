@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace CronetSharp
 {
@@ -139,7 +140,16 @@ namespace CronetSharp
                 return _engineParams;
             }
 
-            // TODO: public key pins
+            /// <summary>
+            /// Pins a set of public keys for a given host.
+            /// </summary>
+            /// <returns></returns>
+            public Builder AddPublicKeyPins(string hostname, IList<string> pinsSha256, bool includeSubdomains, DateTime expirationDate)
+            {
+                _engineParams.AddPublicKeyPins(new PublicKeyPins(hostname, pinsSha256, includeSubdomains, expirationDate));
+                return this;
+            }
+            
             // TODO: quic(hints)
             
             /// <summary>
