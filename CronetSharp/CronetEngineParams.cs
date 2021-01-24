@@ -23,17 +23,17 @@ namespace CronetSharp
         /// <summary>
         /// Set public key pins
         /// </summary>
-        public IList<PublicKeyPins> PublicKeyPins
+        public PublicKeyPins[] PublicKeyPins
         {
             get
             {
-                var publicKeyPins = new List<PublicKeyPins>();
-
                 var size = Cronet.EngineParams.Cronet_EngineParams_public_key_pins_size(Pointer);
+                var publicKeyPins = new PublicKeyPins[size];
+
                 for (uint i = 0; i < size; i++)
                 {
                     var publicKeyPinPointer = Cronet.EngineParams.Cronet_EngineParams_public_key_pins_at(Pointer, i);
-                    publicKeyPins.Add(new PublicKeyPins(publicKeyPinPointer));
+                    publicKeyPins[i] = new PublicKeyPins(publicKeyPinPointer);
                 }
 
                 return publicKeyPins;
@@ -48,17 +48,17 @@ namespace CronetSharp
         /// <summary>
         /// Set QUIC hints
         /// </summary>
-        public IList<QuicHint> QuicHints
+        public QuicHint[] QuicHints
         {
             get
             {
-                var quicHints = new List<QuicHint>();
-
                 var size = Cronet.EngineParams.Cronet_EngineParams_quic_hints_size(Pointer);
+                var quicHints = new QuicHint[size];
+
                 for (uint i = 0; i < size; i++)
                 {
                     var quicHintPointer = Cronet.EngineParams.Cronet_EngineParams_quic_hints_at(Pointer, i);
-                    quicHints.Add(new QuicHint(quicHintPointer));
+                    quicHints[i] = new QuicHint(quicHintPointer);
                 }
 
                 return quicHints;
@@ -78,6 +78,11 @@ namespace CronetSharp
             Cronet.EngineParams.Cronet_EngineParams_public_key_pins_add(Pointer, publicKeyPins.Pointer);
         }
 
+        public void ClearPublicKeyPins()
+        {
+            Cronet.EngineParams.Cronet_EngineParams_public_key_pins_clear(Pointer);
+        }
+
         /// <summary>
         /// Adds hint that a host supports QUIC.
         /// </summary>
@@ -85,6 +90,11 @@ namespace CronetSharp
         public void AddQuicHint(QuicHint quicHint)
         {
             Cronet.EngineParams.Cronet_EngineParams_quic_hints_add(Pointer, quicHint.Pointer);
+        }
+
+        public void ClearQuicHints()
+        {
+            Cronet.EngineParams.Cronet_EngineParams_quic_hints_clear(Pointer);
         }
 
         /// <summary>

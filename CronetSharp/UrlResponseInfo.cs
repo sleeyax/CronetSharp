@@ -22,17 +22,17 @@ namespace CronetSharp
         /// Each list of values for a single header field is in the same order they were received over the wire.
         /// </summary>
         /// <value></value>
-        public IList<HttpHeader> Headers
+        public HttpHeader[] Headers
         {
             get
             { 
-                var headers = new List<HttpHeader>();
-                
                 var size = Cronet.UrlResponseInfo.Cronet_UrlResponseInfo_all_headers_list_size(_urlResponseInfoPtr);
+                var headers = new HttpHeader[size];
+                
                 for (uint i = 0; i < size; i++)
                 {
                     var httpHeaderPtr = Cronet.UrlResponseInfo.Cronet_UrlResponseInfo_all_headers_list_at(_urlResponseInfoPtr, i);
-                    headers.Add(new HttpHeader(httpHeaderPtr));
+                    headers[i] = new HttpHeader(httpHeaderPtr);
                 }
 
                 return headers;
@@ -116,16 +116,16 @@ namespace CronetSharp
         /// The first entry is the originally requested URL; the following entries are redirects followed.
         /// </summary>
         /// <value></value>
-        public IList<string> UrlChain
+        public string[] UrlChain
         {
             get
             {
-                var chains = new List<string>();
                 var size = Cronet.UrlResponseInfo.Cronet_UrlResponseInfo_url_chain_size(_urlResponseInfoPtr);
+                var chains = new string[size];
                 for (uint i = 0; i < size; i++)
                 {
                     var chain = Cronet.UrlResponseInfo.Cronet_UrlResponseInfo_url_chain_at(_urlResponseInfoPtr, i);
-                    chains.Add(chain);
+                    chains[i] = chain;
                 }
                 return chains;
             }

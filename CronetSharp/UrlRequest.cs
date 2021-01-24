@@ -152,7 +152,7 @@ namespace CronetSharp
             /// </summary>
             /// <param name="headers"></param>
             /// <returns></returns>
-            public Builder SetHeaders(IList<HttpHeader> headers)
+            public Builder SetHeaders(HttpHeader[] headers)
             {
                 _urlRequestParams.Headers = headers;
                 return this;

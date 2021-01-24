@@ -32,7 +32,7 @@ namespace CronetSharp
         /// <summary>
         /// Set or get the request headers.
         /// </summary>
-        public IList<HttpHeader> Headers
+        public HttpHeader[] Headers
         {
             set
             {
@@ -42,11 +42,11 @@ namespace CronetSharp
             get
             {
                 var size = Cronet.UrlRequestParams.Cronet_UrlRequestParams_request_headers_size(Pointer);
-                var headers = new List<HttpHeader>();
+                var headers = new HttpHeader[size];
                 for (uint i = 0; i < size; i++)
                 {
                     var header = new HttpHeader(Cronet.UrlRequestParams.Cronet_UrlRequestParams_request_headers_at(Pointer, i));
-                    headers.Add(header);
+                    headers[i] = header;
                 }
                 return headers;
             }

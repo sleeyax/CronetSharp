@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using DateTime = System.DateTime;
 
 namespace CronetSharp
 {
@@ -79,9 +80,9 @@ namespace CronetSharp
         /// Shuts down the CronetEngine if there are no active requests, otherwise throws an exception.
         /// May block until all the CronetEngine's resources have been cleaned up. 
         /// </summary>
-        public void Shutdown()
+        public Cronet.EngineResult Shutdown()
         {
-            Cronet.Engine.Cronet_Engine_Shutdown(_enginePtr);
+            return Cronet.Engine.Cronet_Engine_Shutdown(_enginePtr);
         }
         
         /// <summary>
@@ -144,7 +145,7 @@ namespace CronetSharp
             /// Pins a set of public keys for a given host.
             /// </summary>
             /// <returns></returns>
-            public Builder AddPublicKeyPins(string hostname, IList<string> pinsSha256, bool includeSubdomains, DateTime expirationDate)
+            public Builder AddPublicKeyPins(string hostname, string[] pinsSha256, bool includeSubdomains, DateTime expirationDate)
             {
                 _engineParams.AddPublicKeyPins(new PublicKeyPins(hostname, pinsSha256, includeSubdomains, expirationDate));
                 return this;

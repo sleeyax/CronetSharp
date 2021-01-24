@@ -64,7 +64,7 @@ namespace example
             {
                 HttpMethod = "GET",
                 Priority = RequestPriority.Highest,
-                Headers = new List<HttpHeader>
+                Headers = new []
                 {
                     new HttpHeader("user-agent", "mycustomuseragent"),
                     new HttpHeader("accept", "*/*"),

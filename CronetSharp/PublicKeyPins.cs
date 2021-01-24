@@ -17,7 +17,7 @@ namespace CronetSharp
             Pointer = publicKeyPinsPointer;
         }
         
-        public PublicKeyPins(string hostname, IList<string> pinsSha256, bool includeSubdomains, DateTime expirationDate)
+        public PublicKeyPins(string hostname, string[] pinsSha256, bool includeSubdomains, DateTime expirationDate)
         {
             Pointer = Cronet.PublicKeyPins.Cronet_PublicKeyPins_Create();
             Host = hostname;
@@ -55,16 +55,16 @@ namespace CronetSharp
         /// <summary>
         /// Set SHA256 pins.
         /// </summary>
-        public IList<string> Pins
+        public string[] Pins
         {
             get
             { 
-                var pins = new List<string>();
                 var size = Cronet.PublicKeyPins.Cronet_PublicKeyPins_pins_sha256_size(Pointer);
+                var pins = new string[size];
                 for (uint i = 0; i < size; i++)
                 {
                     var pin = Cronet.PublicKeyPins.Cronet_PublicKeyPins_pins_sha256_at(Pointer, i);
-                    pins.Add(pin);
+                    pins[i] = pin;
                 }
                 return pins;
             }
