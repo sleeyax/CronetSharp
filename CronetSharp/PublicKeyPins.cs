@@ -25,6 +25,13 @@ namespace CronetSharp
             IncludeSubdomains = includeSubdomains;
             ExpirationDate = (long) (expirationDate - new DateTime(1970, 1, 1)).TotalSeconds;
         }
+        
+        public PublicKeyPins(string hostname, string[] pinsSha256)
+        {
+            Pointer = Cronet.PublicKeyPins.Cronet_PublicKeyPins_Create();
+            Host = hostname;
+            Pins = pinsSha256;
+        }
 
         public void Dispose()
         {

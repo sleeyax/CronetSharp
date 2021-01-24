@@ -100,9 +100,9 @@ namespace CronetSharp
         /// </summary>
         /// <param name="fileName"></param>
         /// <param name="logAll"></param>
-        public void StartNetLogToFile(string fileName, bool logAll)
+        public bool StartNetLogToFile(string fileName, bool logAll)
         {
-            Cronet.Engine.Cronet_Engine_StartNetLogToFile(_enginePtr, fileName, logAll);
+            return Cronet.Engine.Cronet_Engine_StartNetLogToFile(_enginePtr, fileName, logAll);
         }
 
         /// <summary>
