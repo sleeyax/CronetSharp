@@ -4,16 +4,29 @@ namespace CronetSharp
 {
     public class QuicHint
     {
-        private readonly IntPtr _quicHintPtr;
+        public IntPtr Pointer { get; }
         
         public QuicHint()
         {
-            _quicHintPtr = Cronet.QuicHint.Cronet_QuicHint_Create();
+            Pointer = Cronet.QuicHint.Cronet_QuicHint_Create();
+        }
+
+        public QuicHint(IntPtr quicHintPointer)
+        {
+            Pointer = quicHintPointer;
+        }
+
+        public QuicHint(string host, int port, int alternatePort)
+        {
+            Pointer = Cronet.QuicHint.Cronet_QuicHint_Create();
+            Host = host;
+            Port = port;
+            AlternatePort = alternatePort;
         }
 
         public void Destroy()
         {
-            Cronet.QuicHint.Cronet_QuicHint_Destroy(_quicHintPtr);
+            Cronet.QuicHint.Cronet_QuicHint_Destroy(Pointer);
         }
 
         /// <summary>
@@ -21,8 +34,8 @@ namespace CronetSharp
         /// </summary>
         public string Host
         {
-            get => Cronet.QuicHint.Cronet_QuicHint_host_get(_quicHintPtr);
-            set => Cronet.QuicHint.Cronet_QuicHint_host_set(_quicHintPtr, value);
+            get => Cronet.QuicHint.Cronet_QuicHint_host_get(Pointer);
+            set => Cronet.QuicHint.Cronet_QuicHint_host_set(Pointer, value);
         }
         
         /// <summary>
@@ -30,8 +43,8 @@ namespace CronetSharp
         /// </summary>
         public int Port
         {
-            get => Cronet.QuicHint.Cronet_QuicHint_port_get(_quicHintPtr);
-            set => Cronet.QuicHint.Cronet_QuicHint_port_set(_quicHintPtr, value);
+            get => Cronet.QuicHint.Cronet_QuicHint_port_get(Pointer);
+            set => Cronet.QuicHint.Cronet_QuicHint_port_set(Pointer, value);
         }
         
         /// <summary>
@@ -39,8 +52,8 @@ namespace CronetSharp
         /// </summary>
         public int AlternatePort
         {
-            get => Cronet.QuicHint.Cronet_QuicHint_alternate_port_get(_quicHintPtr);
-            set => Cronet.QuicHint.Cronet_QuicHint_alternate_port_set(_quicHintPtr, value);
+            get => Cronet.QuicHint.Cronet_QuicHint_alternate_port_get(Pointer);
+            set => Cronet.QuicHint.Cronet_QuicHint_alternate_port_set(Pointer, value);
         }
     }
 }

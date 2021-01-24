@@ -149,8 +149,19 @@ namespace CronetSharp
                 _engineParams.AddPublicKeyPins(new PublicKeyPins(hostname, pinsSha256, includeSubdomains, expirationDate));
                 return this;
             }
-            
-            // TODO: quic(hints)
+
+            /// <summary>
+            /// Adds hint that a host supports QUIC.
+            /// </summary>
+            /// <param name="host"></param>
+            /// <param name="port"></param>
+            /// <param name="alternatePort"></param>
+            /// <returns></returns>
+            public Builder AddQuicHint(string host, int port, int alternatePort)
+            {
+                _engineParams.AddQuicHint(new QuicHint(host, port, alternatePort));
+                return this;
+            }
             
             /// <summary>
             /// Sets whether Brotli compression is enabled.
