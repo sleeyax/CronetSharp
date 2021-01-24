@@ -27,7 +27,7 @@ namespace CronetSharp
         public ByteBuffer(ulong size, byte[] data, ByteBufferCallback callback)
         {
             Pointer = Cronet.Buffer.Cronet_Buffer_Create();
-            IntPtr rawDataPtr = new IntPtr();
+            IntPtr rawDataPtr = Marshal.AllocHGlobal(data.Length);
             Marshal.Copy(data, 0, rawDataPtr, data.Length);
             Cronet.Buffer.Cronet_Buffer_InitWithDataAndCallback(Pointer, rawDataPtr, size, callback.Pointer);
         }
