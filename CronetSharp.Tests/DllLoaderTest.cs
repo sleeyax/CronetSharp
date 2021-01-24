@@ -49,13 +49,5 @@ namespace CronetSharp.Tests
             var loader = new CronetLoader();
             Assert.Throws<ArgumentException>(() => loader.Load(""));
         }
-        
-        [Test]
-        public void TestThrowErrorWhenDllInvalid()
-        {
-            var loader = new CronetLoader();
-            loader.Load(Path.Combine("Fakes", "Cronet"));
-            Assert.Throws<EntryPointNotFoundException>(() => new CronetEngine());
-        }
     }
 }
