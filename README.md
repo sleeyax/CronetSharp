@@ -14,8 +14,7 @@ loader.Load("/absolute/path/to/dir/containing/cronet/dll");
 
 // Create and configure an instance of CronetEngine
 CronetEngine.Builder myBuilder = new CronetEngine.Builder();
-CronetEngine cronetEngine = myBuilder.Build();
-cronetEngine.Start();
+CronetEngine cronetEngine = myBuilder.BuildAndStart();
 
 // Provide an implementation of the request callback
 var myUrlRequestCallback = new UrlRequestCallback(new UrlRequestCallbackHandler
@@ -62,9 +61,7 @@ cronetEngine.Dispose();
 
  Please note that this library is built in an explicit way. 
  You'll have to clean up unused resources in unmanaged memory yourself by calling `.Dispose()` on objects or by wrapping them in `using` blocks.
- The cronet engine also needs to be started manually with `.Start()`. 
- I've chosen to do this because it gives more control to the programmer. 
- This decision might change in the future though.
+ Also don't forget to `.Start()` your Cronet Engine if you're not using any of the built-in factories or helper methods that do this for you. 
  
  ### Csharpified
  The typical 'builder pattern' that's overused by Google here can be simplified using C# object initializers.
@@ -81,7 +78,7 @@ Can also be written as:
 ```c#
 UrlRequest request = cronetEngine.NewUrlRequest("https://example.com", myUrlRequestCallback, executor, new UrlRequestParams
 {
-    Headers = new List<HttpHeader>{ new HttpHeader("user-agent", "mycustomuseragent") },
+    Headers = new [] { new HttpHeader("user-agent", "mycustomuseragent") },
     DisableCache = true,
     Priority = RequestPriority.Highest,
 });

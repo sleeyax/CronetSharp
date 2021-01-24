@@ -146,6 +146,13 @@ namespace CronetSharp
             {
                 return new CronetEngine(_engineParams);
             }
+            
+            public CronetEngine BuildAndStart()
+            {
+                var engine = new CronetEngine(_engineParams);
+                engine.Start();
+                return engine;
+            }
 
             public CronetEngineParams GetParams()
             {
