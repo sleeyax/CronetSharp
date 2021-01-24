@@ -6,13 +6,15 @@ namespace CronetSharp
     {
         public IntPtr Pointer { get; }
         
-        public Executor()
+        public Executor() : this(runnable =>
         {
-            Pointer = Cronet.Executor.Cronet_Executor_CreateWith((self, command) =>
-            {
-                Cronet.Runnable.Cronet_Runnable_Run(command);
-                Cronet.Runnable.Cronet_Runnable_Destroy(command);
-            });
+            runnable.Run();
+            runnable.Dispose();
+        }) {}
+        
+        public Executor(Action<Runnable> hander)
+        {
+            Pointer = Cronet.Executor.Cronet_Executor_CreateWith((executorPtr, runnablePtr) => hander(new Runnable(runnablePtr)));
         }
 
         public Executor(IntPtr executorPtr)
@@ -23,6 +25,11 @@ namespace CronetSharp
         public void Dispose()
         {
             Cronet.Executor.Cronet_Executor_Destroy(Pointer);
+        }
+
+        public void Execute(Runnable runnable)
+        {
+            Cronet.Executor.Cronet_Executor_Execute(Pointer, runnable.Pointer);
         }
     }
 }
