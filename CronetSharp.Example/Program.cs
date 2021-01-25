@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Linq;
 using CronetSharp;
-using CronetSharp.Cronet;
 using CronetSharp.Cronet.Asm;
+using example.Examples;
 
 namespace example
 {
@@ -16,83 +17,15 @@ namespace example
             // create & start cronet engine
             var engine = CreateEngine();
             Console.WriteLine($"Engine version: {engine.Version}");
+
+            // run random example
+            var examples = new IExample[] { new GetRequestExample(), new PostRequestExample() };
+            var example = examples.ElementAt(new Random().Next(0, examples.Length));
             
-            // create default executor
-            var executor = new Executor();
+            example.Run(engine);
 
-            // create callback
-            var handler = new UrlRequestCallbackHandler
-            {
-                OnRedirectReceived = (request, info, arg3) =>
-                {
-                    Console.WriteLine("-> redirect received");
-                    request.FollowRedirect();
-                },
-                OnResponseStarted = (request, info) =>
-                {
-                    Console.WriteLine("-> response started");
-                    request.Read(ByteBuffer.Allocate(102400));
-                },
-                OnReadCompleted = (request, info, byteBuffer, bytesRead) =>
-                {
-                    Console.WriteLine("-> read completed");
-                    Console.WriteLine(byteBuffer.GetDataAsString());
-                    byteBuffer.Clear();
-                    request.Read(byteBuffer);
-                },
-                OnSucceeded = (request, info) =>
-                {
-                    Console.WriteLine("-> succeeded");
-                    Console.WriteLine($"Negotiated protocol: {info.NegotiatedProtocol}");
-                    Console.WriteLine($"Response Status code: {info.HttpStatusCode}");
-                    Console.WriteLine($"Response Headers: ");
-                    foreach (var header in info.Headers)
-                        Console.WriteLine($"{header.Name}:{header.Value}");
-                    Console.WriteLine($"Response bytes received: {info.ReceivedByteCount}");
-                },
-                OnFailed = (request, info, error) => Console.WriteLine("-> failed"),
-                OnCancelled = (request, info) => Console.WriteLine("-> canceled")
-            };
-
-            var myUrlRequestCallback = new UrlRequestCallback(handler);
-
-            // Create and configure a UrlRequest object
-            // send GET request
-            var getRequestParams = new UrlRequestParams
-            {
-                HttpMethod = "GET",
-                Priority = RequestPriority.Highest,
-                Headers = new []
-                {
-                    new HttpHeader("user-agent", "mycustomuseragent"),
-                    new HttpHeader("accept", "*/*"),
-                    new HttpHeader("cookie", "abc=def; foo=bar"),
-                    // new HttpHeader("cookie", "foo=bar")
-                }
-            };
-            var getRequest = engine.NewUrlRequest("https://httpbin.org/anything", myUrlRequestCallback, executor, getRequestParams);
-            getRequestParams.Dispose();
-
-            Console.WriteLine("Starting GET request...");
-            getRequest.Start();
-            // query status of the request (note: this is not a 'callback setter' so it will only log a value once)
-            // getRequest.GetStatus(status => Console.WriteLine($"Current request status: {status}"));
-
-            // send POST request (using alternative builder syntax)
-            var postRequestBuilder = engine.NewUrlRequestBuilder("https://httpbin.org/anything", myUrlRequestCallback, executor)
-                .SetHttpMethod("POST")
-                .AddHeader("content-type", "application/json")
-                .AddHeader("my-custom-header", "customvalue")
-                .SetUploadDataProvider(UploadDataProvider.Create("{}"), executor);
-            var postRequest = postRequestBuilder.Build();
-            postRequestBuilder.GetParams().Dispose(); // free up now unnecessary resources from unmanaged memory
-            Console.WriteLine("Starting POST request...");
-            postRequest.Start();
-
-            Console.WriteLine("Press any key to stop...");
             Console.ReadKey();
-            getRequest.Dispose();
-            postRequest.Dispose();
+            example.Dispose();
             engine.Shutdown();
             engine.Dispose();
         }
