@@ -86,8 +86,9 @@ UrlRequest request = cronetEngine.NewUrlRequest("https://example.com", myUrlRequ
  
  ## Missing Features
 Below is a list of functionalities that exist in cronet but were not added to this library (yet).
- * ClientContext (Cronet_ClientContext)
- * Metrics
+ * ClientContext (to pass the current object context to underlying native structures in order to retrieve it later, as seen in the Java implementation for Android)
+ * Metrics (only really used for logging)
+ * Stream handler (implementation of the java.net.HttpURLConnection API)
  
  ## Cronet
  Please see Google's [build instructions](https://chromium.googlesource.com/chromium/src/+/master/components/cronet/build_instructions.md) in order to build cronet from source.
