@@ -111,3 +111,9 @@ $ ninja -C out\Release cronet
 * For ARMv8 64-bit: `target_cpu="arm64"`
 * For x86 32-bit: `target_cpu="x86"`
 * For x86 64-bit: `target_cpu="x64"`
+
+## License
+Proprietary Software
+
+Currently I do not wish to license this code, which means all rights are reserved. 
+You do not have the right to to use, modify, share modifications, or share the software without prior written consent from the author.
