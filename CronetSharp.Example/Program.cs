@@ -3,6 +3,7 @@ using System.Linq;
 using CronetSharp;
 using CronetSharp.Cronet.Asm;
 using example.Examples;
+using example.Examples.Proxies;
 
 namespace example
 {
@@ -20,7 +21,7 @@ namespace example
 
             // run random example
             var examples = new IExample[] { new GetRequestExample(), new PostRequestExample() };
-            var example = examples.ElementAt(new Random().Next(0, examples.Length));
+            var example = new ProxyRequestExample(); // examples.ElementAt(new Random().Next(0, examples.Length));
             
             example.Run(engine);
 
