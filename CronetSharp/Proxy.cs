@@ -72,7 +72,7 @@ namespace CronetSharp
         public Proxy(string proxy)
         {
             if (!proxy.Contains("://"))
-                throw new ArgumentException("Invalid proxy: protocol must be specified!");
+                proxy = "http://" + proxy;
 
             ProxyFormat format = proxy.Contains("@") ? ProxyFormat.ReverseNotation : ProxyFormat.Normal;
             if (format == ProxyFormat.ReverseNotation)
