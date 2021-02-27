@@ -19,8 +19,10 @@ namespace example
             Console.WriteLine($"Engine version: {engine.Version}");
 
             // run random example
-            var examples = new IExample[] { new GetRequestExample(), new PostRequestExample() };
-            var example = examples.ElementAt(new Random().Next(0, examples.Length));
+            var exampleProxy = new Proxy("127.0.0.1", 8888);
+            var examples = new IExample[] { new GetRequestExample(), new PostRequestExample(), new ProxyRequestExample(exampleProxy) };
+            bool testProxy = false;
+            var example = examples.ElementAt(new Random().Next(0, examples.Length - (testProxy ? 1 : 0)));
             
             example.Run(engine);
 

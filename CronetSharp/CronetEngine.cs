@@ -273,6 +273,28 @@ namespace CronetSharp
                 _engineParams.UserAgent = userAgent;
                 return this;
             }
+            
+            /// <summary>
+            /// Set Proxy to use for each request
+            /// </summary>
+            /// <param name="proxy"></param>
+            /// <returns></returns>
+            public Builder SetProxy(string proxy)
+            {
+                _engineParams.Proxy = new Proxy(proxy);
+                return this;
+            }
+            
+            /// <summary>
+            /// Set Proxy to use for each request
+            /// </summary>
+            /// <param name="proxy"></param>
+            /// <returns></returns>
+            public Builder SetProxy(Proxy proxy)
+            {
+                _engineParams.Proxy = proxy;
+                return this;
+            }
 
             /// <summary>
             /// Overrides the Accept-Language header for all requests.
