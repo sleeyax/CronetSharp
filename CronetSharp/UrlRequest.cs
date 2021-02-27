@@ -146,6 +146,28 @@ namespace CronetSharp
                 _urlRequestParams.AddHeader(header, value);
                 return this;
             }
+
+            /// <summary>
+            /// Set the proxy to use for this UrlRequest.
+            /// </summary>
+            /// <param name="proxy"></param>
+            /// <returns></returns>
+            public Builder SetProxy(string proxy)
+            {
+                _urlRequestParams.Proxy = new Proxy(proxy);
+                return this;
+            }
+            
+            /// <summary>
+            /// Set the proxy to use for this UrlRequest.
+            /// </summary>
+            /// <param name="proxy"></param>
+            /// <returns></returns>
+            public Builder SetProxy(Proxy proxy)
+            {
+                _urlRequestParams.Proxy = proxy;
+                return this;
+            }
             
             /// <summary>
             /// Sets the request headers.

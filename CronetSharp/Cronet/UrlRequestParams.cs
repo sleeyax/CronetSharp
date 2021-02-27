@@ -20,6 +20,13 @@ namespace CronetSharp.Cronet
         );
         
         [DllImport(CronetLoader.Dll)]
+        internal static extern void Cronet_UrlRequestParams_proxy_set(IntPtr urlRequestParamsPtr, string proxy);
+        
+        [DllImport(CronetLoader.Dll)]
+        [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(StringMarshaler))]
+        internal static extern string Cronet_UrlRequestParams_proxy_get(IntPtr urlRequestParamsPtr);
+        
+        [DllImport(CronetLoader.Dll)]
         internal static extern void Cronet_UrlRequestParams_request_headers_add(IntPtr urlRequestParamsPtr, IntPtr httpHeaderPtr);
         
         [DllImport(CronetLoader.Dll)]

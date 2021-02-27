@@ -117,5 +117,12 @@ namespace CronetSharp.Cronet
         
         [DllImport(CronetLoader.Dll)]
         internal static extern void Cronet_EngineParams_user_agent_set(IntPtr engineParamsPtr, string userAgent);
+        
+        [DllImport(CronetLoader.Dll)]
+        [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(StringMarshaler))]
+        internal static extern string Cronet_EngineParams_proxy_get(IntPtr engineParamsPtr);
+        
+        [DllImport(CronetLoader.Dll)]
+        internal static extern void Cronet_EngineParams_proxy_set(IntPtr engineParamsPtr, string proxy);
     }
 }

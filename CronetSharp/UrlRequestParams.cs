@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using CronetSharp.Cronet;
 
 namespace CronetSharp
 {
@@ -80,6 +78,12 @@ namespace CronetSharp
             get => Cronet.UrlRequestParams.Cronet_UrlRequestParams_http_method_get(Pointer);
             set => Cronet.UrlRequestParams.Cronet_UrlRequestParams_http_method_set(Pointer, value);
         }
+        
+        public Proxy Proxy
+        {
+            get => new Proxy(Cronet.UrlRequestParams.Cronet_UrlRequestParams_proxy_get(Pointer));
+            set => Cronet.UrlRequestParams.Cronet_UrlRequestParams_proxy_set(Pointer, value.Format(ProxyFormat.ReverseNotation));
+        }
 
         /// <summary>
         /// Sets priority of the request.
@@ -111,7 +115,7 @@ namespace CronetSharp
         /// <summary>
         /// Sets idempotency
         /// </summary>
-        public Idempotency Idempotency
+        public Cronet.Idempotency Idempotency
         {
             get => Cronet.UrlRequestParams.Cronet_UrlRequestParams_idempotency_get(Pointer);
             set => Cronet.UrlRequestParams.Cronet_UrlRequestParams_idempotency_set(Pointer, value);

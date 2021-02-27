@@ -170,6 +170,15 @@ namespace CronetSharp
         }
         
         /// <summary>
+        /// Sets the proxy to use
+        /// </summary>
+        public Proxy Proxy
+        {
+            get => new Proxy(Cronet.EngineParams.Cronet_EngineParams_proxy_get(Pointer));
+            set => Cronet.EngineParams.Cronet_EngineParams_proxy_set(Pointer, value.Format(ProxyFormat.ReverseNotation));
+        }
+        
+        /// <summary>
         /// Sets the accept-language header
         /// </summary>
         public string AcceptLanguage
