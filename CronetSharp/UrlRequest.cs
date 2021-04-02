@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using CronetSharp.Cronet;
 
 namespace CronetSharp
 {
@@ -241,7 +238,7 @@ namespace CronetSharp
             /// </summary>
             /// <param name="idempotency"></param>
             /// <returns></returns>
-            public Builder SetIdempotency(Idempotency idempotency)
+            public Builder SetIdempotency(Cronet.Idempotency idempotency)
             {
                 _urlRequestParams.Idempotency = idempotency;
                 return this;
