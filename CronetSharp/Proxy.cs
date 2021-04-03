@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO.Pipes;
 using System.Text;
 
 namespace CronetSharp
@@ -65,7 +64,7 @@ namespace CronetSharp
         }
 
         /// <summary>
-        /// Construct a new Proxy from a proxy string with a format of address:port[:username:password]
+        /// Construct a new Proxy from a proxy string
         /// </summary>
         /// <param name="proxy"></param>
         /// <exception cref="ArgumentException"></exception>
@@ -82,6 +81,24 @@ namespace CronetSharp
             Protocol = split[0];
 
             ParseProxy(split[1], format);
+        }
+
+        /// <summary>
+        /// Tries to parse given proxy string into a Proxy object.
+        /// Returns null on failure.
+        /// </summary>
+        /// <param name="proxy"></param>
+        /// <returns></returns>
+        public static Proxy TryParse(string proxy)
+        {
+            try
+            {
+                return new Proxy(proxy);
+            }
+            catch (ArgumentException)
+            {
+                return null;
+            }
         }
 
         /// <summary>

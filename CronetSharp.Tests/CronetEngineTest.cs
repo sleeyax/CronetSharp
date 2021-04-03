@@ -33,7 +33,7 @@ namespace CronetSharp.Tests
         }
 
         [Test]
-        public void TestGetVersonString()
+        public void TestGetVersionString()
         {
             using var engine = new CronetEngine();
             string version = engine.Version;

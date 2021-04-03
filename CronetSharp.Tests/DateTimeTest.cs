@@ -5,6 +5,7 @@ namespace CronetSharp.Tests
     [TestFixture]
     public class DateTimeTest : SetupCronet
     {
+        [Test]
         public void TestDateTime()
         {
             long time = 1611526959768;

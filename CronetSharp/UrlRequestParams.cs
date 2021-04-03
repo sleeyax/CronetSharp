@@ -81,7 +81,7 @@ namespace CronetSharp
         
         public Proxy Proxy
         {
-            get => new Proxy(Cronet.UrlRequestParams.Cronet_UrlRequestParams_proxy_get(Pointer));
+            get => Proxy.TryParse(Cronet.UrlRequestParams.Cronet_UrlRequestParams_proxy_get(Pointer));
             set => Cronet.UrlRequestParams.Cronet_UrlRequestParams_proxy_set(Pointer, value.Format(ProxyFormat.ReverseNotation));
         }
 
