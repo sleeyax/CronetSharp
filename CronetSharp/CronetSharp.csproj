@@ -3,6 +3,9 @@
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
         <RootNamespace>CronetSharp</RootNamespace>
+        <Company>Sleeyax</Company>
+        <Copyright>Sleeyax</Copyright>
+        <AssemblyVersion>1.0.1.0</AssemblyVersion>
     </PropertyGroup>
     
     <ItemGroup>
