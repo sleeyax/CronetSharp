@@ -33,6 +33,17 @@ namespace CronetSharp.Tests
         }
 
         [Test]
+        public void TestCanStartTwoEngines()
+        {
+            using var engineParams1 = new CronetEngineParams();
+            using var engine1 = new CronetEngine(engineParams1);
+            using var engineParams2 = new CronetEngineParams();
+            using var engine2 = new CronetEngine(engineParams2);
+            Assert.AreEqual(EngineResult.SUCCESS, engine1.Start());
+            Assert.AreEqual(EngineResult.SUCCESS, engine2.Start());
+        }
+
+        [Test]
         public void TestGetVersionString()
         {
             using var engine = new CronetEngine();
