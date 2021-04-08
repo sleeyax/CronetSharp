@@ -43,7 +43,7 @@ var myUrlRequestCallback = new UrlRequestCallback(new UrlRequestCallbackHandler
 });
 
 // Create an Executor object to manage network tasks
-var executor = new Executor();
+var executor = Executors.NewSingleThreadExecutor();
 
 // Create and configure a UrlRequest object
 UrlRequest.Builder requestBuilder = cronetEngine.NewUrlRequestBuilder("https://example.com", myUrlRequestCallback, executor);
