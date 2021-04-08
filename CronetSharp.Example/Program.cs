@@ -14,6 +14,8 @@ namespace example
             // load dll
             var loader = new CronetLoader();
             loader.Load();
+            
+            // MultiThreadingExample.Run();
 
             // create & start cronet engine
             using var engine = CreateEngine();
