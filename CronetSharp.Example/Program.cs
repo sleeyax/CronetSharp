@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using CronetSharp;
 using CronetSharp.Cronet.Asm;
@@ -15,21 +16,21 @@ namespace example
             loader.Load();
 
             // create & start cronet engine
-            var engine = CreateEngine();
+            using var engine = CreateEngine();
             Console.WriteLine($"Engine version: {engine.Version}");
 
             // run random example
-            var exampleProxy = new Proxy("127.0.0.1", 8888);
-            var examples = new IExample[] { new GetRequestExample(), new PostRequestExample(), new ProxyRequestExample(exampleProxy) };
             bool testProxy = false;
-            var example = examples.ElementAt(new Random().Next(0, examples.Length - (testProxy ? 1 : 0)));
+            var examples = new List<IExample>() {new GetRequestExample(), new PostRequestExample()};
+            if (testProxy) 
+                examples.Add(new ProxyRequestExample(new Proxy("127.0.0.1", 8888)));
+            var example = examples.ElementAt(new Random().Next(0, examples.Count));
             
             example.Run(engine);
 
             Console.ReadKey();
             example.Dispose();
             engine.Shutdown();
-            engine.Dispose();
         }
 
         static CronetEngine CreateEngine()
