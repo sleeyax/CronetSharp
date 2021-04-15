@@ -16,5 +16,25 @@ namespace CronetSharp.Tests
             executor.Execute(runnable);
             Assert.IsTrue(ran);
         }
+
+        [Test]
+        public void TestCanExecuteMultipleRunnable()
+        {
+            int count = 0;
+            int max = 20;
+
+            while (count < max)
+            {
+                using var executor = Executors.NewSingleThreadExecutor();
+                // NOTE: DO NOT DISPOSE THE RUNNABLE BELOW MANUALLY! It is already disposed by the executor above.
+                var runnable = new Runnable(() =>
+                {
+                    count += 1;
+                });
+                executor.Execute(runnable);
+            }
+            
+            Assert.AreEqual(count, max);
+        }
     }
 }
