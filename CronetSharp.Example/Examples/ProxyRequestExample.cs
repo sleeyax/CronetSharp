@@ -28,7 +28,7 @@ namespace example.Examples
             
             // create default executor & callback
             var executor = new Executor();
-            var myUrlRequestCallback = new UrlRequestCallback(new ExampleCallBackHandler());
+            var myUrlRequestCallback = new ExampleCallBack();
             
             // target url
             var uri = new Uri("https://httpbin.org/anything");

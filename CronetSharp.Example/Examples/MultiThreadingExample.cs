@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using CronetSharp;
+using CronetSharp.Cronet;
 
 namespace example.Examples
 {
@@ -41,8 +42,8 @@ namespace example.Examples
             Console.WriteLine("waiting for t2");
             Console.WriteLine(t2.Result);
         }
-
-        private static async Task<string> DoRequest(string url, string method, string body = null, HttpHeader[] headers = null)
+        
+        public static async Task<string> DoRequest(string url, string method, string body = null, HttpHeader[] headers = null)
         {
             // This task completion source will contain the response body
             // or an error in case something went wrong.
@@ -59,8 +60,8 @@ namespace example.Examples
             
             // Create a stream object where response bytes will be copied to.
             using var bodyStream = new MemoryStream();
-            
-            using var urlRequestCallback = new UrlRequestCallback(new UrlRequestCallbackHandler
+
+            using var urlRequestCallback = new UrlRequestCallback
             {
                 OnRedirectReceived = (req, info, _) => req.Cancel(),
                 OnResponseStarted = (req, info) => req.Read(ByteBuffer.Allocate(102400)),
@@ -80,14 +81,14 @@ namespace example.Examples
                         string body = Encoding.UTF8.GetString(bodyStream.ToArray());
                         taskCompletionSource.TrySetResult(body);
                     }
-                    catch (Exception ex)
+                    catch (Exception error)
                     {
-                        taskCompletionSource.TrySetResult("error");
+                        taskCompletionSource.TrySetException(error);
                     }
                 },
-                OnCancelled = (request, info) => taskCompletionSource.TrySetResult(null),
-                OnFailed = (req, info, error) => taskCompletionSource.TrySetResult($"Failed: {error.CronetErrorMessage}")
-            });
+                OnCancelled = (request, info) => taskCompletionSource.TrySetCanceled(),
+                OnFailed = (req, info, error) => taskCompletionSource.TrySetException(error)
+            };
 
             using var urlRequestParams = new UrlRequestParams
             {
@@ -98,12 +99,8 @@ namespace example.Examples
             };
             
             // If a request body was specified (e.g. POST request), set the upload provider.
-            UploadDataProvider uploadDataProvider = null;
             if (body != null)
-            {
-                uploadDataProvider = UploadDataProvider.Create(body);
-                urlRequestParams.UploadDataProvider = uploadDataProvider;
-            }
+                urlRequestParams.UploadDataProvider = UploadDataProvider.Create(body);
 
             // Create & start the url request (on a separate single thread).
             using var executor = Executors.NewSingleThreadExecutor();
@@ -114,10 +111,13 @@ namespace example.Examples
             // so the task can complete.
             var result = await taskCompletionSource.Task;
 
-            // When the task is done, clean up.
-            engine.Shutdown();
-            uploadDataProvider?.Dispose();
+            // When the task is done, clean up remaining unmanaged resources.
+            urlRequestParams.UploadDataProvider?.Dispose();
 
+            var engineResult = engine.Shutdown();
+            if (engineResult != EngineResult.SUCCESS)
+                throw new Exception($"Failed to shutdown engine. Result: {engineResult}");
+            
             return result;
         } 
     }

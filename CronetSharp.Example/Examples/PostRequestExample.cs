@@ -12,7 +12,7 @@ namespace example.Examples
             // create default executor
             var executor = new Executor();
             
-            var myUrlRequestCallback = new UrlRequestCallback(new ExampleCallBackHandler());
+            var myUrlRequestCallback = new ExampleCallBack();
             
             var postRequestBuilder = engine.NewUrlRequestBuilder("https://httpbin.org/anything", myUrlRequestCallback, executor)
                 .SetHttpMethod("POST")

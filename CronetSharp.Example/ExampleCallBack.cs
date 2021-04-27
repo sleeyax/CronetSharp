@@ -3,9 +3,9 @@ using CronetSharp;
 
 namespace example
 {
-    public class ExampleCallBackHandler : UrlRequestCallbackHandler
+    public class ExampleCallBack : UrlRequestCallback
     {
-        public ExampleCallBackHandler()
+        public ExampleCallBack()
         {
             OnRedirectReceived = (request, info, arg3) =>
             {

@@ -14,7 +14,7 @@ namespace example.Examples
             var executor = new Executor();
 
             // create callback
-            var myUrlRequestCallback = new UrlRequestCallback(new ExampleCallBackHandler());
+            var myUrlRequestCallback = new ExampleCallBack();
 
             // Create and configure a UrlRequest object
             // send GET request
