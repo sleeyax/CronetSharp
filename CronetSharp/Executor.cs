@@ -14,7 +14,10 @@ namespace CronetSharp
         
         public Executor(Action<Runnable> hander)
         {
-            Pointer = Cronet.Executor.Cronet_Executor_CreateWith((executorPtr, runnablePtr) => hander(new Runnable(runnablePtr)));
+            Cronet.Executor.ExecuteFunc executeFunc = (executorPtr, runnablePtr) => hander(new Runnable(runnablePtr));
+            var handle = GCManager.Alloc(executeFunc);
+            Pointer = Cronet.Executor.Cronet_Executor_CreateWith(executeFunc);
+            GCManager.Register(Pointer, handle);
         }
 
         public Executor(IntPtr executorPtr)
@@ -25,6 +28,7 @@ namespace CronetSharp
         public void Dispose()
         {
             Cronet.Executor.Cronet_Executor_Destroy(Pointer);
+            GCManager.Free(Pointer);
         }
 
         public void Execute(Runnable runnable)

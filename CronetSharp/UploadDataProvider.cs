@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -15,12 +16,21 @@ namespace CronetSharp
         
         public UploadDataProvider(UploadDataProviderHandler handler)
         {
+            Cronet.UploadDataProvider.GetLengthFunc getLengthFunc = uploadDataProviderPtr => handler.GetLength();
+            Cronet.UploadDataProvider.ReadFunc readFunc = (uploadDataProviderPtr, uploadDataSinkPtr, byteBufferPtr) => handler.Read(new UploadDataSink(uploadDataSinkPtr), new ByteBuffer(byteBufferPtr));
+            Cronet.UploadDataProvider.RewindFunc rewindFunc = (uploadDataProviderPtr, uploadDataSinkPtr) => handler.Rewind(new UploadDataSink(uploadDataSinkPtr));
+            Cronet.UploadDataProvider.CloseFunc closeFunc = uploadDataProviderPtr => handler.Close();
+
+            var handles = new object[] {getLengthFunc, readFunc, rewindFunc, closeFunc}.Select(GCManager.Alloc);
+            
             Pointer = Cronet.UploadDataProvider.Cronet_UploadDataProvider_CreateWith(
-                uploadDataProviderPtr => handler.GetLength(),
-                (uploadDataProviderPtr, uploadDataSinkPtr, byteBufferPtr) => handler.Read(new UploadDataSink(uploadDataSinkPtr), new ByteBuffer(byteBufferPtr)),
-                (uploadDataProviderPtr, uploadDataSinkPtr) => handler.Rewind(new UploadDataSink(uploadDataSinkPtr)),
-                uploadDataProviderPtr => handler.Close()
+                getLengthFunc,
+                readFunc, 
+                rewindFunc,
+                closeFunc
             );
+            
+            GCManager.Register(Pointer, handles.ToArray());
         }
 
         public UploadDataProvider(IntPtr uploadDataProviderPtr)
@@ -31,6 +41,7 @@ namespace CronetSharp
         public void Dispose()
         {
             Cronet.UploadDataProvider.Cronet_UploadDataProvider_Destroy(Pointer);
+            GCManager.Free(Pointer);
         }
 
         public void Close()

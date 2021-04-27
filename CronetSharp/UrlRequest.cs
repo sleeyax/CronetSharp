@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Drawing;
 
 namespace CronetSharp
 {
     public class UrlRequest : IDisposable
     {
         private readonly IntPtr _urlRequestPtr;
+
+        private IntPtr _urlRequestStatusListenerPtr;
 
         public UrlRequest()
         {
@@ -19,6 +22,7 @@ namespace CronetSharp
         public void Dispose()
         {
             Cronet.UrlRequest.Cronet_UrlRequest_Destroy(_urlRequestPtr);
+            GCManager.Free(_urlRequestStatusListenerPtr);
         }
 
         /// <summary>
@@ -63,8 +67,11 @@ namespace CronetSharp
         /// <param name="onStatus"></param>
         public void GetStatus(Action<Cronet.UrlRequestStatus> onStatus)
         {
-            IntPtr urlRequestStatusListenerPtr = Cronet.UrlRequestStatusListener.Cronet_UrlRequestStatusListener_CreateWith((self, status) => onStatus(status));
-            Cronet.UrlRequest.Cronet_UrlRequest_GetStatus(_urlRequestPtr, urlRequestStatusListenerPtr);
+            Cronet.UrlRequestStatusListener.OnStatusFunc onStatusFunc = (self, status) => onStatus(status);
+            var handler = GCManager.Alloc(onStatusFunc);
+            _urlRequestStatusListenerPtr = Cronet.UrlRequestStatusListener.Cronet_UrlRequestStatusListener_CreateWith(onStatusFunc);
+            GCManager.Register(_urlRequestStatusListenerPtr, handler);
+            Cronet.UrlRequest.Cronet_UrlRequest_GetStatus(_urlRequestPtr, _urlRequestStatusListenerPtr);
         }
 
         /// <summary>

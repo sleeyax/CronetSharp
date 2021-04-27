@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace CronetSharp
 {
@@ -18,17 +19,27 @@ namespace CronetSharp
 
         public UploadDataSink(UploadDataSinkHandler handler)
         {
+            Cronet.UploadDataSink.OnReadSucceededFunc onReadSucceededFunc = (uploadDataSinkPtr, bytesRead, isFinalChunk) => handler.OnReadSucceeded(bytesRead, isFinalChunk);
+            Cronet.UploadDataSink.OnReadErrorFunc onReadErrorFunc = (uploadDataSinkPtr, error) => handler.OnReadError(new Exception(error));
+            Cronet.UploadDataSink.OnRewindSucceededFunc onRewindSucceededFunc = uploadDataSinkPtr => handler.OnRewindSucceeded();
+            Cronet.UploadDataSink.OnRewindErrorFunc onRewindErrorFunc = (uploadDataSinkPtr, error) => handler.OnRewindError(new Exception(error));
+            
+            var handles = new object[]{onReadSucceededFunc, onReadErrorFunc, onRewindSucceededFunc, onRewindErrorFunc}.Select(GCManager.Alloc);
+
             _uploadDataSinkPtr = Cronet.UploadDataSink.Cronet_UploadDataSink_CreateWith(
-                (uploadDataSinkPtr, bytesRead, isFinalChunk) => handler.OnReadSucceeded(bytesRead, isFinalChunk),
-                (uploadDataSinkPtr, error) => handler.OnReadError(new Exception(error)),
-                uploadDataSinkPtr => handler.OnRewindSucceeded(),
-                (uploadDataSinkPtr, error) => handler.OnRewindError(new Exception(error))
+                onReadSucceededFunc,
+                onReadErrorFunc,
+                onRewindSucceededFunc,
+                onRewindErrorFunc    
             );
+            
+            GCManager.Register(_uploadDataSinkPtr, handles.ToArray());
         }
 
         public void Dispose()
         {
             Cronet.UploadDataSink.Cronet_UploadDataSink_Destroy(_uploadDataSinkPtr);
+            GCManager.Free(_uploadDataSinkPtr);
         }
 
         /// <summary>

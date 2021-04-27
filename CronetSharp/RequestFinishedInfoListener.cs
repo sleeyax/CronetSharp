@@ -8,9 +8,10 @@ namespace CronetSharp
 
         public RequestFinishedInfoListener(Action<RequestFinishedInfo, UrlResponseInfo, CronetException> handler)
         {
-            Pointer = Cronet.RequestFinishedInfoListener.Cronet_RequestFinishedInfoListener_CreateWith(
-                (requestFinishedInfoListenerPtr, requestFinishedInfoPtr, urlResponseInfoPtr, errorPtr) => handler(new RequestFinishedInfo(requestFinishedInfoPtr), new UrlResponseInfo(urlResponseInfoPtr), new CronetException(errorPtr))
-            );
+            Cronet.RequestFinishedInfoListener.OnRequestFinishedFunc onRequestFinishedFunc = (requestFinishedInfoListenerPtr, requestFinishedInfoPtr, urlResponseInfoPtr, errorPtr) => handler(new RequestFinishedInfo(requestFinishedInfoPtr), new UrlResponseInfo(urlResponseInfoPtr), new CronetException(errorPtr));
+            var handle = GCManager.Alloc(onRequestFinishedFunc);
+            Pointer = Cronet.RequestFinishedInfoListener.Cronet_RequestFinishedInfoListener_CreateWith(onRequestFinishedFunc);
+            GCManager.Register(Pointer, handle);
         }
 
         public RequestFinishedInfoListener(IntPtr pointer)
@@ -21,6 +22,7 @@ namespace CronetSharp
         public void Dispose()
         {
             Cronet.RequestFinishedInfoListener.Cronet_RequestFinishedInfoListener_Destroy(Pointer);
+            GCManager.Free(Pointer);
         }
     }
 }

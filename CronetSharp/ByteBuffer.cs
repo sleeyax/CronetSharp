@@ -8,6 +8,8 @@ namespace CronetSharp
     {
         public IntPtr Pointer { get; }
 
+        private readonly ByteBufferCallback _callback;
+
         public ByteBuffer()
         {
             Pointer = Cronet.Buffer.Cronet_Buffer_Create();
@@ -27,6 +29,7 @@ namespace CronetSharp
         public ByteBuffer(ulong size, byte[] data, ByteBufferCallback callback)
         {
             Pointer = Cronet.Buffer.Cronet_Buffer_Create();
+            _callback = callback;
             IntPtr rawDataPtr = Marshal.AllocHGlobal(data.Length);
             Marshal.Copy(data, 0, rawDataPtr, data.Length);
             Cronet.Buffer.Cronet_Buffer_InitWithDataAndCallback(Pointer, rawDataPtr, size, callback.Pointer);
@@ -50,6 +53,7 @@ namespace CronetSharp
         public void Dispose()
         {
             Cronet.Buffer.Cronet_Buffer_Destroy(Pointer);
+            _callback?.Dispose();
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 
 namespace CronetSharp
 {
@@ -8,7 +9,10 @@ namespace CronetSharp
         
         public ByteBufferCallback(Action<ByteBuffer> onDestroy)
         {
-            Pointer = Cronet.BufferCallback.Cronet_BufferCallback_CreateWith((bufferCallbackPtr, bufferPtr) => onDestroy(new ByteBuffer(bufferPtr)));
+            Cronet.BufferCallback.OnDestroyFunc onDestroyFunc = (bufferCallbackPtr, bufferPtr) => onDestroy(new ByteBuffer(bufferPtr));
+            var handle = GCManager.Alloc(onDestroyFunc);
+            Pointer = Cronet.BufferCallback.Cronet_BufferCallback_CreateWith(onDestroyFunc);
+            GCManager.Register(Pointer, handle);
         }
 
         public ByteBufferCallback(IntPtr byteBufferCallbackPtr)
@@ -19,6 +23,7 @@ namespace CronetSharp
         public void Dispose()
         {
             Cronet.BufferCallback.Cronet_BufferCallback_Destroy(Pointer);
+            GCManager.Free(Pointer);
         }
     }
 }

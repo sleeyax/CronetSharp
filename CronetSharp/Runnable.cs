@@ -8,7 +8,10 @@ namespace CronetSharp
 
         public Runnable(Action handler)
         {
-            Pointer = Cronet.Runnable.Cronet_Runnable_CreateWith(_ => handler());
+            Cronet.Runnable.RunFunc runFunc = _ => handler();
+            var handle = GCManager.Alloc(runFunc);
+            Pointer = Cronet.Runnable.Cronet_Runnable_CreateWith(runFunc);
+            GCManager.Register(Pointer, handle);
         }
         
         public Runnable(IntPtr pointer)
@@ -19,6 +22,7 @@ namespace CronetSharp
         public void Dispose()
         {
             Cronet.Runnable.Cronet_Runnable_Destroy(Pointer);
+            GCManager.Free(Pointer);
         }
 
         public void Run()

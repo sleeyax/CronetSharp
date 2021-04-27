@@ -4,10 +4,10 @@ using CronetSharp.Cronet.Bin;
 
 namespace CronetSharp.Cronet
 {
-    internal delegate void ExecuteFunc(IntPtr executorPtr, IntPtr runnablePtr);
-    
     internal static class Executor
     {
+        internal delegate void ExecuteFunc(IntPtr executorPtr, IntPtr runnablePtr);
+        
         [DllImport(CronetLoader.Dll)]
         internal static extern void Cronet_Executor_Destroy(IntPtr executorPtr);
         
