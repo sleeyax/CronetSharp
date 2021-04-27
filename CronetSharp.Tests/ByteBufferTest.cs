@@ -1,3 +1,4 @@
+using System;
 using NUnit.Framework;
 
 namespace CronetSharp.Tests
@@ -37,6 +38,7 @@ namespace CronetSharp.Tests
             byte[] data = Helpers.GenRandomBytes((int) _byteBufferSize);
             bool destroyed = false;
             var buffer = new ByteBuffer(_byteBufferSize, data, new ByteBufferCallback(_ => destroyed = true));
+            GC.Collect();
             buffer.Dispose();
             Assert.AreEqual(true, destroyed);
         }
