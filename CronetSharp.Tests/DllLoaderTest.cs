@@ -1,5 +1,5 @@
 ﻿using System;
-using CronetSharp.Cronet.Asm;
+using CronetSharp.Cronet.Bin;
 using NUnit.Framework;
 
 namespace CronetSharp.Tests

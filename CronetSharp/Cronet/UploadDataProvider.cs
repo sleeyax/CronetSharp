@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using CronetSharp.Cronet.Asm;
+using CronetSharp.Cronet.Bin;
 
 namespace CronetSharp.Cronet
 {

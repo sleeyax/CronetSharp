@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using CronetSharp.Cronet.Asm;
+using CronetSharp.Cronet.Bin;
 using NUnit.Framework;
 
 namespace CronetSharp.Tests
@@ -16,7 +16,7 @@ namespace CronetSharp.Tests
             var localPath = typeof(SetupCronet).Assembly.EscapedCodeBase.Replace("file:///", "");
             var dir = Path.GetDirectoryName(localPath);
             var platform = Environment.Is64BitProcess ? "Win64" : "Win32";
-            var path = Path.Combine(dir, "Cronet", "Asm", platform);
+            var path = Path.Combine(dir, "Cronet", "Bin", platform);
             new CronetLoader().Load(path);
         }
     }

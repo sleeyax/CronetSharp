@@ -14,10 +14,10 @@
     </ItemGroup>
     
     <ItemGroup>
-      <Content Include="Cronet\Asm\Win32\cronet.dll">
+      <Content Include="Cronet\Bin\Win32\cronet.dll">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
-      <Content Include="Cronet\Asm\Win64\cronet.dll">
+      <Content Include="Cronet\Bin\Win64\cronet.dll">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
     </ItemGroup>
