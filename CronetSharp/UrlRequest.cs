@@ -64,10 +64,10 @@ namespace CronetSharp
         /// <summary>
         /// Queries the status of the request.
         /// </summary>
-        /// <param name="onStatus"></param>
-        public void GetStatus(Action<Cronet.UrlRequestStatus> onStatus)
+        /// <param name="onStatusChanged"></param>
+        public void OnStatusChanged(Action<Cronet.UrlRequestStatus> onStatusChanged)
         {
-            Cronet.UrlRequestStatusListener.OnStatusFunc onStatusFunc = (self, status) => onStatus(status);
+            Cronet.UrlRequestStatusListener.OnStatusFunc onStatusFunc = (self, status) => onStatusChanged(status);
             var handler = GCManager.Alloc(onStatusFunc);
             _urlRequestStatusListenerPtr = Cronet.UrlRequestStatusListener.Cronet_UrlRequestStatusListener_CreateWith(onStatusFunc);
             GCManager.Register(_urlRequestStatusListenerPtr, handler);
