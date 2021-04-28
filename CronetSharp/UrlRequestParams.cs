@@ -19,6 +19,11 @@ namespace CronetSharp
         public void Dispose()
         {
             Cronet.UrlRequestParams.Cronet_UrlRequestParams_Destroy(Pointer);
+            ClearHeaders();
+            UploadDataProvider?.Dispose();
+            UploadDataProviderExecutor?.Dispose();
+            RequestFinishedInfoListener?.Dispose();
+            RequestFinishedInfoListenerExecutor?.Dispose();
         }
 
         public void AddHeader(string header, string value)
