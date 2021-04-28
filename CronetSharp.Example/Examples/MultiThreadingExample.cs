@@ -43,7 +43,7 @@ namespace example.Examples
             Console.WriteLine(t2.Result);
         }
         
-        public static async Task<string> DoRequest(string url, string method, string body = null, HttpHeader[] headers = null)
+        public static async Task<string> DoRequest(string url, string method, string body = null, HttpHeader[] headers = null, Proxy proxy = null)
         {
             // This task completion source will contain the response body
             // or an error in case something went wrong.
@@ -56,6 +56,7 @@ namespace example.Examples
                 Http2Enabled = true,
                 CheckResultEnabled = false,
             };
+            if (proxy != null)  engineParams.Proxy = proxy;
             using var engine = CronetEngine.CreateAndStart(engineParams);
             
             // Create a stream object where response bytes will be copied to.
@@ -100,25 +101,32 @@ namespace example.Examples
             
             // If a request body was specified (e.g. POST request), set the upload provider.
             if (body != null)
+            {
                 urlRequestParams.UploadDataProvider = UploadDataProvider.Create(body);
+                urlRequestParams.UploadDataProviderExecutor = new Executor();
+            }
 
             // Create & start the url request (on a separate single thread).
             using var executor = Executors.NewSingleThreadExecutor();
             using var urlRequest = engine.NewUrlRequest(url, urlRequestCallback, executor, urlRequestParams);
             urlRequest.Start();
 
-            // Wait for the request callback to set the result of the taskCompletionSource
-            // so the task can complete.
-            var result = await taskCompletionSource.Task;
-
-            // When the task is done, clean up remaining unmanaged resources.
-            urlRequestParams.UploadDataProvider?.Dispose();
-
-            var engineResult = engine.Shutdown();
-            if (engineResult != EngineResult.SUCCESS)
-                throw new Exception($"Failed to shutdown engine. Result: {engineResult}");
-            
-            return result;
+            try
+            {
+                // Wait for the request callback to set the result of the taskCompletionSource
+                // so the task can complete.
+                var result = await taskCompletionSource.Task;
+                
+                return result;
+            }
+            finally
+            {
+                // try to shutdown the engine
+                // if that doesn't work for some reason, throw fatal error
+                var engineResult = engine.Shutdown();
+                if (engineResult != EngineResult.SUCCESS)
+                    throw new Exception($"Failed to shutdown engine. Result: {engineResult}");
+            }
         } 
     }
 }
