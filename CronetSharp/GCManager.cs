@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Collections.Concurrent;
 
 namespace CronetSharp
 {
@@ -10,7 +10,7 @@ namespace CronetSharp
     /// </summary>
     public static class GCManager
     {
-        private static Dictionary<IntPtr, GCHandle[]> _registeredHandles = new Dictionary<IntPtr, GCHandle[]>();
+        private static ConcurrentDictionary<IntPtr, GCHandle[]> _registeredHandles = new ConcurrentDictionary<IntPtr, GCHandle[]>();
         
         /// <summary>
         /// Allocates a handle with recommended type for the specified object.
@@ -26,7 +26,7 @@ namespace CronetSharp
         /// <param name="handles"></param>
         public static void Register(IntPtr ptr, params GCHandle[] handles)
         {
-            _registeredHandles.Add(ptr, handles);
+            _registeredHandles.TryAdd(ptr, handles);
         }
 
         /// <summary>
@@ -37,16 +37,14 @@ namespace CronetSharp
         {
             if (ptr == default) return;
             
-            var handlePtr = _registeredHandles.Keys.ToArray().FirstOrDefault(p => p == ptr);
+            var registeredHandle = _registeredHandles.FirstOrDefault(p => p.Key == ptr);
             
-            if (handlePtr == default) return;
+            if (registeredHandle.Key == default) return;
 
-            var handles = _registeredHandles[handlePtr];
-            
-            foreach (var handle in handles)
+            foreach (var handle in registeredHandle.Value)
                 if (handle.IsAllocated) handle.Free();
             
-            _registeredHandles.Remove(ptr);
+            _registeredHandles.TryRemove(ptr, out _);
         }
     }
 }
