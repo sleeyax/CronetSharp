@@ -10,8 +10,8 @@ namespace CronetSharp
     /// </summary>
     public static class GCManager
     {
-        private static Dictionary<IntPtr, GCHandle[]> _objects = new Dictionary<IntPtr, GCHandle[]>();
-
+        private static Dictionary<IntPtr, GCHandle[]> _registeredHandles = new Dictionary<IntPtr, GCHandle[]>();
+        
         /// <summary>
         /// Allocates a handle with recommended type for the specified object.
         /// </summary>
@@ -26,7 +26,7 @@ namespace CronetSharp
         /// <param name="handles"></param>
         public static void Register(IntPtr ptr, params GCHandle[] handles)
         {
-            _objects.Add(ptr, handles);
+            _registeredHandles.Add(ptr, handles);
         }
 
         /// <summary>
@@ -36,12 +36,17 @@ namespace CronetSharp
         public static void Free(IntPtr ptr)
         {
             if (ptr == default) return;
-            var kvp = _objects.FirstOrDefault(o => o.Key == ptr);
-            if (kvp.Equals(default(KeyValuePair<IntPtr, GCHandle[]>))) return;
-            var handles = kvp.Value;
+            
+            var handlePtr = _registeredHandles.Keys.ToArray().FirstOrDefault(p => p == ptr);
+            
+            if (handlePtr == default) return;
+
+            var handles = _registeredHandles[handlePtr];
+            
             foreach (var handle in handles)
                 if (handle.IsAllocated) handle.Free();
-            _objects.Remove(ptr);
+            
+            _registeredHandles.Remove(ptr);
         }
     }
 }
