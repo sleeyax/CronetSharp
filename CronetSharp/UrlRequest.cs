@@ -89,10 +89,7 @@ namespace CronetSharp
         /// Returns true if the request was successfully started and is now finished (completed, canceled, or failed).
         /// </summary>
         /// <returns></returns>
-        public bool IsDone()
-        {
-            return Cronet.UrlRequest.Cronet_UrlRequest_IsDone(_urlRequestPtr);
-        }
+        public bool IsDone => Cronet.UrlRequest.Cronet_UrlRequest_IsDone(_urlRequestPtr);
 
         public class Builder
         {
