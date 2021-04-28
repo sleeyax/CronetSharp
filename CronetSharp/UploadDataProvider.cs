@@ -17,12 +17,12 @@ namespace CronetSharp
         /// <summary>
         /// If this is a non-chunked upload, returns the length of the upload.
         /// </summary>
-        public Func<long> GetLength;
+        public Func<long> OnGetLength;
         
         /// <summary>
         /// Reads upload data into byteBuffer.
         /// </summary>
-        public Action<UploadDataSink, ByteBuffer> Read;
+        public Action<UploadDataSink, ByteBuffer> OnRead;
         
         /// <summary>
         /// Rewinds upload data.
@@ -30,19 +30,19 @@ namespace CronetSharp
         /// This is mostly useful for chunked uploads.
         /// E.g callback code resets index value to 0 in order to prepare for the next stream of uploaded chunks. 
         /// </summary>
-        public Action<UploadDataSink> Rewind;
+        public Action<UploadDataSink> OnRewind;
         
         /// <summary>
         /// Called when this UploadDataProvider is no longer needed by a request, so that resources (like a file) can be explicitly released.
         /// </summary>
-        public Action Closed;
+        public Action OnClose;
         
         public UploadDataProvider()
         {
-            Cronet.UploadDataProvider.GetLengthFunc getLengthFunc = uploadDataProviderPtr => GetLength();
-            Cronet.UploadDataProvider.ReadFunc readFunc = (uploadDataProviderPtr, uploadDataSinkPtr, byteBufferPtr) => Read(new UploadDataSink(uploadDataSinkPtr), new ByteBuffer(byteBufferPtr));
-            Cronet.UploadDataProvider.RewindFunc rewindFunc = (uploadDataProviderPtr, uploadDataSinkPtr) => Rewind(new UploadDataSink(uploadDataSinkPtr));
-            Cronet.UploadDataProvider.CloseFunc closeFunc = uploadDataProviderPtr => Closed();
+            Cronet.UploadDataProvider.GetLengthFunc getLengthFunc = uploadDataProviderPtr => OnGetLength();
+            Cronet.UploadDataProvider.ReadFunc readFunc = (uploadDataProviderPtr, uploadDataSinkPtr, byteBufferPtr) => OnRead(new UploadDataSink(uploadDataSinkPtr), new ByteBuffer(byteBufferPtr));
+            Cronet.UploadDataProvider.RewindFunc rewindFunc = (uploadDataProviderPtr, uploadDataSinkPtr) => OnRewind(new UploadDataSink(uploadDataSinkPtr));
+            Cronet.UploadDataProvider.CloseFunc closeFunc = uploadDataProviderPtr => OnClose();
 
             var handles = new object[] {getLengthFunc, readFunc, rewindFunc, closeFunc}.Select(GCManager.Alloc);
             
@@ -83,7 +83,7 @@ namespace CronetSharp
         public static UploadDataProvider Create(byte[] data, int offset, int length, bool isFinalChunk = false)
         {
             return new UploadDataProvider {
-                Read = (uploadDataSink, byteBuffer) =>
+                OnRead = (uploadDataSink, byteBuffer) =>
                 {
                     try
                     {
@@ -96,9 +96,9 @@ namespace CronetSharp
                         uploadDataSink.NotifyReadError(ex.Message);
                     }
                 },
-                GetLength = () => (long) length,
-                Rewind = _ => { },
-                Closed = () => { }
+                OnGetLength = () => (long) length,
+                OnRewind = _ => { },
+                OnClose = () => { }
             };;
         }
 
@@ -120,6 +120,24 @@ namespace CronetSharp
         public static UploadDataProvider Create(string data)
         {
             return Create(Encoding.ASCII.GetBytes(data));
+        }
+        
+        [Obsolete(Constants.MethodIsTestOnly)]
+        public void Read(UploadDataSink uploadDataSink, ByteBuffer byteBuffer)
+        {
+            Cronet.UploadDataProvider.Cronet_UploadDataProvider_Read(Pointer, uploadDataSink.Pointer, byteBuffer.Pointer);
+        }
+
+        [Obsolete(Constants.MethodIsTestOnly)]
+        public long GetLength()
+        {
+            return Cronet.UploadDataProvider.Cronet_UploadDataProvider_GetLength(Pointer);
+        }
+        
+        [Obsolete(Constants.MethodIsTestOnly)]
+        public void Rewind(UploadDataSink uploadDataSink)
+        {
+            Cronet.UploadDataProvider.Cronet_UploadDataProvider_Rewind(Pointer, uploadDataSink.Pointer);
         }
     }
 }

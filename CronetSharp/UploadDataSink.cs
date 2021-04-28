@@ -5,7 +5,7 @@ namespace CronetSharp
 {
     public class UploadDataSink : IDisposable
     {
-        private readonly IntPtr _uploadDataSinkPtr;
+        public IntPtr Pointer { get; }
         
         /// <summary>
         /// Called by UploadDataProvider when a read succeeds.
@@ -27,19 +27,13 @@ namespace CronetSharp
         /// </summary>
         public Action<Exception> OnRewindError;
         
-        public UploadDataSink(IntPtr uploadDataSinkPtr)
+        public UploadDataSink(IntPtr pointer)
         {
-            _uploadDataSinkPtr = uploadDataSinkPtr;
+            Pointer = pointer;
         }
 
         public UploadDataSink()
         {
-            if (OnReadSucceeded == default && OnReadError == default && OnRewindSucceeded == default && OnRewindError == default)
-            {
-                _uploadDataSinkPtr = Cronet.UploadDataSink.Cronet_UploadDataSink_Create();
-                return;
-            }
-            
             Cronet.UploadDataSink.OnReadSucceededFunc onReadSucceededFunc = (uploadDataSinkPtr, bytesRead, isFinalChunk) => OnReadSucceeded(bytesRead, isFinalChunk);
             Cronet.UploadDataSink.OnReadErrorFunc onReadErrorFunc = (uploadDataSinkPtr, error) => OnReadError(new Exception(error));
             Cronet.UploadDataSink.OnRewindSucceededFunc onRewindSucceededFunc = uploadDataSinkPtr => OnRewindSucceeded();
@@ -47,20 +41,20 @@ namespace CronetSharp
             
             var handles = new object[]{onReadSucceededFunc, onReadErrorFunc, onRewindSucceededFunc, onRewindErrorFunc}.Select(GCManager.Alloc);
 
-            _uploadDataSinkPtr = Cronet.UploadDataSink.Cronet_UploadDataSink_CreateWith(
+            Pointer = Cronet.UploadDataSink.Cronet_UploadDataSink_CreateWith(
                 onReadSucceededFunc,
                 onReadErrorFunc,
                 onRewindSucceededFunc,
                 onRewindErrorFunc    
             );
             
-            GCManager.Register(_uploadDataSinkPtr, handles.ToArray());
+            GCManager.Register(Pointer, handles.ToArray());
         }
 
         public void Dispose()
         {
-            Cronet.UploadDataSink.Cronet_UploadDataSink_Destroy(_uploadDataSinkPtr);
-            GCManager.Free(_uploadDataSinkPtr);
+            Cronet.UploadDataSink.Cronet_UploadDataSink_Destroy(Pointer);
+            GCManager.Free(Pointer);
         }
 
         /// <summary>
@@ -68,35 +62,35 @@ namespace CronetSharp
         /// </summary>
         /// <param name="bytesRead"></param>
         /// <param name="isFinalChunk"></param>
-        internal void NotifyReadSucceeded(ulong bytesRead, bool isFinalChunk)
+        public void NotifyReadSucceeded(ulong bytesRead, bool isFinalChunk)
         {
-            Cronet.UploadDataSink.Cronet_UploadDataSink_OnReadSucceeded(_uploadDataSinkPtr, bytesRead, isFinalChunk);
+            Cronet.UploadDataSink.Cronet_UploadDataSink_OnReadSucceeded(Pointer, bytesRead, isFinalChunk);
         }
         
         /// <summary>
         /// Notify data sink listener that read failed
         /// </summary>
         /// <param name="error"></param>
-        internal void NotifyReadError(string error)
+        public void NotifyReadError(string error)
         {
-            Cronet.UploadDataSink.Cronet_UploadDataSink_OnReadError(_uploadDataSinkPtr, error);
+            Cronet.UploadDataSink.Cronet_UploadDataSink_OnReadError(Pointer, error);
         }
         
         /// <summary>
         /// Notify data sink listener that rewind succeeded
         /// </summary>
-        internal void NotifyRewindSucceeded()
+        public void NotifyRewindSucceeded()
         {
-            Cronet.UploadDataSink.Cronet_UploadDataSink_OnRewindSucceeded(_uploadDataSinkPtr);
+            Cronet.UploadDataSink.Cronet_UploadDataSink_OnRewindSucceeded(Pointer);
         }
 
         /// <summary>
         /// Notify data sink listener that rewind failed
         /// </summary>
         /// <param name="error"></param>
-        internal void NotifyRewindSucceeded(string error)
+        public void NotifyRewindSucceeded(string error)
         {
-            Cronet.UploadDataSink.Cronet_UploadDataSink_OnRewindError(_uploadDataSinkPtr, error);
+            Cronet.UploadDataSink.Cronet_UploadDataSink_OnRewindError(Pointer, error);
         }
     }
 }
