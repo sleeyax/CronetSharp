@@ -7,6 +7,26 @@ namespace CronetSharp
     {
         private readonly IntPtr _uploadDataSinkPtr;
         
+        /// <summary>
+        /// Called by UploadDataProvider when a read succeeds.
+        /// </summary>
+        public Action<ulong, bool> OnReadSucceeded;
+        
+        /// <summary>
+        /// Called by UploadDataProvider when a read fails.
+        /// </summary>
+        public Action<Exception> OnReadError;
+        
+        /// <summary>
+        /// Called by UploadDataProvider when a rewind succeeds.
+        /// </summary>
+        public Action OnRewindSucceeded;
+        
+        /// <summary>
+        /// Called by UploadDataProvider when a rewind fails, or if rewinding uploads is not supported.
+        /// </summary>
+        public Action<Exception> OnRewindError;
+        
         public UploadDataSink(IntPtr uploadDataSinkPtr)
         {
             _uploadDataSinkPtr = uploadDataSinkPtr;
@@ -14,15 +34,16 @@ namespace CronetSharp
 
         public UploadDataSink()
         {
-            _uploadDataSinkPtr = Cronet.UploadDataSink.Cronet_UploadDataSink_Create();
-        }
-
-        public UploadDataSink(UploadDataSinkHandler handler)
-        {
-            Cronet.UploadDataSink.OnReadSucceededFunc onReadSucceededFunc = (uploadDataSinkPtr, bytesRead, isFinalChunk) => handler.OnReadSucceeded(bytesRead, isFinalChunk);
-            Cronet.UploadDataSink.OnReadErrorFunc onReadErrorFunc = (uploadDataSinkPtr, error) => handler.OnReadError(new Exception(error));
-            Cronet.UploadDataSink.OnRewindSucceededFunc onRewindSucceededFunc = uploadDataSinkPtr => handler.OnRewindSucceeded();
-            Cronet.UploadDataSink.OnRewindErrorFunc onRewindErrorFunc = (uploadDataSinkPtr, error) => handler.OnRewindError(new Exception(error));
+            if (OnReadSucceeded == default && OnReadError == default && OnRewindSucceeded == default && OnRewindError == default)
+            {
+                _uploadDataSinkPtr = Cronet.UploadDataSink.Cronet_UploadDataSink_Create();
+                return;
+            }
+            
+            Cronet.UploadDataSink.OnReadSucceededFunc onReadSucceededFunc = (uploadDataSinkPtr, bytesRead, isFinalChunk) => OnReadSucceeded(bytesRead, isFinalChunk);
+            Cronet.UploadDataSink.OnReadErrorFunc onReadErrorFunc = (uploadDataSinkPtr, error) => OnReadError(new Exception(error));
+            Cronet.UploadDataSink.OnRewindSucceededFunc onRewindSucceededFunc = uploadDataSinkPtr => OnRewindSucceeded();
+            Cronet.UploadDataSink.OnRewindErrorFunc onRewindErrorFunc = (uploadDataSinkPtr, error) => OnRewindError(new Exception(error));
             
             var handles = new object[]{onReadSucceededFunc, onReadErrorFunc, onRewindSucceededFunc, onRewindErrorFunc}.Select(GCManager.Alloc);
 
