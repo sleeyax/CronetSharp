@@ -17,7 +17,7 @@ CronetEngine.Builder myBuilder = new CronetEngine.Builder();
 CronetEngine cronetEngine = myBuilder.BuildAndStart();
 
 // Provide an implementation of the request callback
-var myUrlRequestCallback = new UrlRequestCallback(new UrlRequestCallbackHandler
+var myUrlRequestCallback = new UrlRequestCallback()
 {
     OnRedirectReceived = (req, info, arg3) =>
     {
@@ -40,7 +40,7 @@ var myUrlRequestCallback = new UrlRequestCallback(new UrlRequestCallbackHandler
     OnSucceeded = (req, info) => { },
     OnFailed = (req, info, error) => { },
     OnCancelled = (req, info) => { }
-});
+};
 
 // Create an Executor object to manage network tasks
 var executor = Executors.NewSingleThreadExecutor();
