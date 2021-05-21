@@ -9,9 +9,10 @@ namespace CronetSharp.Tests
     {
         public bool loaded;
         
-        public void Load(string path)
+        public bool Load(string path)
         {
             loaded = true;
+            return loaded;
         }
     }
 
@@ -19,9 +20,10 @@ namespace CronetSharp.Tests
     {
         public bool loaded;
         
-        public override void Load(string path)
+        public override bool Load(string path)
         {
             loaded = true;
+            return loaded;
         }
     }
     

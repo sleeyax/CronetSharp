@@ -8,20 +8,20 @@ namespace CronetSharp.Cronet.Bin
     {
         internal const string Dll = "cronet.dll";
         
-        [DllImport("kernel32.dll")]
+        [DllImport("kernel32.dll", SetLastError = true, ThrowOnUnmappableChar = true)]
         protected static extern IntPtr LoadLibrary(string dllToLoad);
 
         /// <summary>
         /// Loads the cronet dll into the current process
         /// </summary>
         /// <param name="path">absolute path to directory containing cronet.dll</param>
-        public virtual void Load(string path = null)
+        public virtual bool Load(string path = null)
         {
             if (path == null)
             {
                 var localPath = new Uri(typeof(Engine).Assembly.EscapedCodeBase).LocalPath;
                 var dir = Path.GetDirectoryName(localPath);
-                var platform = Environment.Is64BitOperatingSystem ? "Win64" : "Win32";
+                var platform = Environment.Is64BitProcess ? "Win64" : "Win32";
                 path = Path.Combine(dir, "Cronet", "Bin", platform);
             }
             
@@ -34,6 +34,18 @@ namespace CronetSharp.Cronet.Bin
             #endif
             
             LoadLibrary(binPath);
+            
+            int errorCode = Marshal.GetLastWin32Error();
+
+            if (errorCode != 0)
+            {
+                #if DEBUG
+                    Console.WriteLine($"Failed to load DLL. Error code: {errorCode}");
+                #endif
+                return false;
+            }
+
+            return true;
         }
     }
 }
