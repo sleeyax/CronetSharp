@@ -1,4 +1,5 @@
 bin/
+!CronetSharp/Cronet/Bin/
 obj/
 /packages/
 riderModule.iml
