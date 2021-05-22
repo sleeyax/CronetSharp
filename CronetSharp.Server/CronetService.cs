@@ -4,7 +4,6 @@ using System.Text;
 using System.Threading.Tasks;
 using CronetSharp.Cronet;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using WebSocketSharp;
 using WebSocketSharp.Server;
 
@@ -18,7 +17,7 @@ namespace CronetSharp.Server
         {
             _serializerSettings = new JsonSerializerSettings
             {
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
+                ContractResolver = new CustomContractResolver()
             };
         }
         
