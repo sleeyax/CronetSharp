@@ -37,6 +37,8 @@ namespace CronetSharp
         /// </summary>
         public bool IsAuthenticated => Username != null && Password != null;
 
+        public Proxy() {}
+
         public Proxy(string address, int port, string username, string password)
         {
             Protocol = "http";
