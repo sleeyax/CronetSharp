@@ -88,7 +88,7 @@ namespace CronetSharp
         /// Notify data sink listener that rewind failed
         /// </summary>
         /// <param name="error"></param>
-        public void NotifyRewindSucceeded(string error)
+        public void NotifyRewindError(string error)
         {
             Cronet.UploadDataSink.Cronet_UploadDataSink_OnRewindError(Pointer, error);
         }
