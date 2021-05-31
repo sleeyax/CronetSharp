@@ -125,5 +125,6 @@ List of options that you can use to modify the output of the command above.
 * Separate native components: `is_component_build=true`
 
 ## License
-Currently I do not wish to license this code, which means all rights are reserved. 
-You do not have the right to to use, modify, share modifications, or share the software including its compiled form without prior written consent from the author.
+[GNU Lesser General Public License v3.0](LICENSE)
+
+**TL;DR**: You may copy, distribute and modify the software provided that modifications are described and licensed for free under LGPL. Derivatives works (including modifications or anything statically linked to the library) can only be redistributed under LGPL, but applications that use the library don't have to be.
