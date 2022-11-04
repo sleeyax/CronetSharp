@@ -6,17 +6,22 @@ namespace CronetSharp
     public class CronetEngineParams : IDisposable
     {
         public IntPtr Pointer { get; }
-        
+
         public CronetEngineParams()
         {
             Pointer = Cronet.EngineParams.Cronet_EngineParams_Create();
         }
-        
+
         /// <summary>
         /// Destroy the CronetEngineParams and free up memory.
         /// </summary>
         public void Dispose()
         {
+            if (Pointer == IntPtr.Zero)
+            {
+                return;
+            }
+
             Cronet.EngineParams.Cronet_EngineParams_Destroy(Pointer);
         }
 
@@ -44,7 +49,7 @@ namespace CronetSharp
                     AddPublicKeyPins(publicKeyPins);
             }
         }
-        
+
         /// <summary>
         /// Set QUIC hints
         /// </summary>
@@ -114,7 +119,7 @@ namespace CronetSharp
             get => Cronet.EngineParams.Cronet_EngineParams_enable_http2_get(Pointer);
             set => Cronet.EngineParams.Cronet_EngineParams_enable_http2_set(Pointer, value);
         }
-        
+
         /// <summary>
         /// Enables or disables caching of HTTP data and other information like QUIC server information.
         /// </summary>
@@ -132,7 +137,7 @@ namespace CronetSharp
             get => Cronet.EngineParams.Cronet_EngineParams_http_cache_max_size_get(Pointer);
             set => Cronet.EngineParams.Cronet_EngineParams_http_cache_max_size_set(Pointer, value);
         }
-        
+
         /// <summary>
         /// Enables or disables public key pinning bypass for local trust anchors.
         /// </summary>
@@ -141,7 +146,7 @@ namespace CronetSharp
             get => Cronet.EngineParams.Cronet_EngineParams_enable_public_key_pinning_bypass_for_local_trust_anchors_get(Pointer);
             set => Cronet.EngineParams.Cronet_EngineParams_enable_public_key_pinning_bypass_for_local_trust_anchors_set(Pointer, value);
         }
-        
+
         /// <summary>
         /// Sets whether QUIC protocol is enabled.
         /// </summary>
@@ -150,7 +155,7 @@ namespace CronetSharp
             get => Cronet.EngineParams.Cronet_EngineParams_enable_quic_get(Pointer);
             set => Cronet.EngineParams.Cronet_EngineParams_enable_quic_set(Pointer, value);
         }
-        
+
         /// <summary>
         /// Sets directory for HTTP Cache and Cookie Storage.
         /// </summary>
@@ -159,7 +164,7 @@ namespace CronetSharp
             get => Cronet.EngineParams.Cronet_EngineParams_storage_path_get(Pointer);
             set => Cronet.EngineParams.Cronet_EngineParams_storage_path_set(Pointer, value);
         }
-        
+
         /// <summary>
         /// Sets the user agent header
         /// </summary>
@@ -168,7 +173,7 @@ namespace CronetSharp
             get => Cronet.EngineParams.Cronet_EngineParams_user_agent_get(Pointer);
             set => Cronet.EngineParams.Cronet_EngineParams_user_agent_set(Pointer, value);
         }
-        
+
         /// <summary>
         /// Sets the proxy to use
         /// </summary>
@@ -177,7 +182,7 @@ namespace CronetSharp
             get => Proxy.TryParse(Cronet.EngineParams.Cronet_EngineParams_proxy_get(Pointer));
             set => Cronet.EngineParams.Cronet_EngineParams_proxy_set(Pointer, value.Format(ProxyFormat.ReverseNotation));
         }
-        
+
         /// <summary>
         /// Sets the accept-language header
         /// </summary>

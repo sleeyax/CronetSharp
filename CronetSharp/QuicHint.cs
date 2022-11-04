@@ -5,7 +5,7 @@ namespace CronetSharp
     public class QuicHint : IDisposable
     {
         public IntPtr Pointer { get; }
-        
+
         public QuicHint()
         {
             Pointer = Cronet.QuicHint.Cronet_QuicHint_Create();
@@ -26,6 +26,11 @@ namespace CronetSharp
 
         public void Dispose()
         {
+            if (Pointer == IntPtr.Zero)
+            {
+                return;
+            }
+
             Cronet.QuicHint.Cronet_QuicHint_Destroy(Pointer);
         }
 
@@ -37,7 +42,7 @@ namespace CronetSharp
             get => Cronet.QuicHint.Cronet_QuicHint_host_get(Pointer);
             set => Cronet.QuicHint.Cronet_QuicHint_host_set(Pointer, value);
         }
-        
+
         /// <summary>
         /// Sets port.
         /// </summary>
@@ -46,7 +51,7 @@ namespace CronetSharp
             get => Cronet.QuicHint.Cronet_QuicHint_port_get(Pointer);
             set => Cronet.QuicHint.Cronet_QuicHint_port_set(Pointer, value);
         }
-        
+
         /// <summary>
         /// Sets alternative port.
         /// </summary>

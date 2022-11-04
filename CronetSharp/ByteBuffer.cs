@@ -14,12 +14,12 @@ namespace CronetSharp
         {
             Pointer = Cronet.Buffer.Cronet_Buffer_Create();
         }
-        
+
         public ByteBuffer(IntPtr bufferPtr)
         {
             Pointer = bufferPtr;
         }
-        
+
         public ByteBuffer(ulong size)
         {
             Pointer = Cronet.Buffer.Cronet_Buffer_Create();
@@ -38,7 +38,7 @@ namespace CronetSharp
         public ByteBuffer(ulong size, byte[] data) : this(size, data, new ByteBufferCallback(_ => { })) { }
 
         /// <summary>
-        /// Allocates a new byte buffer. 
+        /// Allocates a new byte buffer.
         /// </summary>
         /// <param name="capacity"></param>
         /// <returns></returns>
@@ -52,7 +52,11 @@ namespace CronetSharp
         /// </summary>
         public void Dispose()
         {
-            Cronet.Buffer.Cronet_Buffer_Destroy(Pointer);
+            if (Pointer != IntPtr.Zero)
+            {
+                Cronet.Buffer.Cronet_Buffer_Destroy(Pointer);
+            }
+
             _callback?.Dispose();
         }
 
@@ -76,7 +80,7 @@ namespace CronetSharp
         {
             return (string) new StringMarshaler().MarshalNativeToManaged(Cronet.Buffer.Cronet_Buffer_GetData(Pointer));
         }
-        
+
         /// <summary>
         /// Read buffer contents.
         /// </summary>

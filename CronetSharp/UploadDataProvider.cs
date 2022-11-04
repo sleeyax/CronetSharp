@@ -8,35 +8,35 @@ namespace CronetSharp
     /// <summary>
     /// Class allowing the embedder to provide an upload body to UrlRequest.
     /// It supports both non-chunked (size known in advanced) and chunked (size not known in advance) uploads.
-    /// Be aware that not all servers support chunked uploads. 
+    /// Be aware that not all servers support chunked uploads.
     /// </summary>
     public class UploadDataProvider : IDisposable
     {
         public IntPtr Pointer { get; }
-        
+
         /// <summary>
         /// If this is a non-chunked upload, returns the length of the upload.
         /// </summary>
         public Func<long> OnGetLength;
-        
+
         /// <summary>
         /// Reads upload data into byteBuffer.
         /// </summary>
         public Action<UploadDataSink, ByteBuffer> OnRead;
-        
+
         /// <summary>
         /// Rewinds upload data.
         ///
         /// This is mostly useful for chunked uploads.
-        /// E.g callback code resets index value to 0 in order to prepare for the next stream of uploaded chunks. 
+        /// E.g callback code resets index value to 0 in order to prepare for the next stream of uploaded chunks.
         /// </summary>
         public Action<UploadDataSink> OnRewind;
-        
+
         /// <summary>
         /// Called when this UploadDataProvider is no longer needed by a request, so that resources (like a file) can be explicitly released.
         /// </summary>
         public Action OnClose;
-        
+
         public UploadDataProvider()
         {
             Cronet.UploadDataProvider.GetLengthFunc getLengthFunc = uploadDataProviderPtr => OnGetLength();
@@ -45,14 +45,14 @@ namespace CronetSharp
             Cronet.UploadDataProvider.CloseFunc closeFunc = uploadDataProviderPtr => OnClose();
 
             var handles = new object[] {getLengthFunc, readFunc, rewindFunc, closeFunc}.Select(GCManager.Alloc);
-            
+
             Pointer = Cronet.UploadDataProvider.Cronet_UploadDataProvider_CreateWith(
                 getLengthFunc,
-                readFunc, 
+                readFunc,
                 rewindFunc,
                 closeFunc
             );
-            
+
             GCManager.Register(Pointer, handles.ToArray());
         }
 
@@ -63,6 +63,11 @@ namespace CronetSharp
 
         public void Dispose()
         {
+            if (Pointer == IntPtr.Zero)
+            {
+                return;
+            }
+
             Cronet.UploadDataProvider.Cronet_UploadDataProvider_Destroy(Pointer);
             GCManager.Free(Pointer);
         }
@@ -111,7 +116,7 @@ namespace CronetSharp
         {
             return Create(data, 0, data.Length);
         }
-        
+
         /// <summary>
         /// Uploads string of data
         /// </summary>
@@ -121,7 +126,7 @@ namespace CronetSharp
         {
             return Create(Encoding.ASCII.GetBytes(data));
         }
-        
+
         [Obsolete(Constants.MethodIsTestOnly)]
         public void Read(UploadDataSink uploadDataSink, ByteBuffer byteBuffer)
         {
@@ -133,7 +138,7 @@ namespace CronetSharp
         {
             return Cronet.UploadDataProvider.Cronet_UploadDataProvider_GetLength(Pointer);
         }
-        
+
         [Obsolete(Constants.MethodIsTestOnly)]
         public void Rewind(UploadDataSink uploadDataSink)
         {

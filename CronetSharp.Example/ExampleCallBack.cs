@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using CronetSharp;
 
 namespace example
@@ -15,12 +16,25 @@ namespace example
             OnResponseStarted = (request, info) =>
             {
                 Console.WriteLine("-> response started");
-                request.Read(ByteBuffer.Allocate(102400));
+
+                ulong contentLength = 102400;
+                HttpHeader httpHeaderContentLength =
+                  ExampleCallBack.GetHttpHeaderByName(info.Headers, "content-length");
+                if (httpHeaderContentLength != null)
+                {
+                    contentLength = UInt32.Parse(httpHeaderContentLength.Value);
+                }
+
+                request.Read(ByteBuffer.Allocate(contentLength));
             };
+
             OnReadCompleted = (request, info, byteBuffer, bytesRead) =>
             {
                 Console.WriteLine("-> read completed");
-                Console.WriteLine(byteBuffer.GetDataAsString());
+
+                byte[] data = byteBuffer.GetData();
+                string strData = UTF8Encoding.UTF8.GetString(data, 0, (int)bytesRead);
+                Console.WriteLine(strData);
                 byteBuffer.Clear();
                 request.Read(byteBuffer);
             };
@@ -36,6 +50,20 @@ namespace example
             };
             OnFailed = (request, info, error) => Console.WriteLine("-> failed");
             OnCancelled = (request, info) => Console.WriteLine("-> canceled");
+        }
+
+        private static HttpHeader GetHttpHeaderByName(HttpHeader[] headers, string headerName)
+        {
+            foreach (HttpHeader header in headers)
+            {
+                var comparison = StringComparison.InvariantCultureIgnoreCase;
+                if (header.Name.Equals(headerName, comparison))
+                {
+                    return header;
+                }
+            }
+
+            return null;
         }
     }
 }

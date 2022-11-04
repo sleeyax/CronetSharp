@@ -10,12 +10,12 @@ namespace CronetSharp
         {
             Pointer = httpHeaderPtr;
         }
-        
+
         public HttpHeader()
         {
             Pointer = Cronet.HttpHeader.Cronet_HttpHeader_Create();
         }
-        
+
         public HttpHeader(string name, string value)
         {
             Pointer = Cronet.HttpHeader.Cronet_HttpHeader_Create();
@@ -25,6 +25,11 @@ namespace CronetSharp
 
         public void Dispose()
         {
+            if (Pointer == IntPtr.Zero)
+            {
+                return;
+            }
+
             Cronet.HttpHeader.Cronet_HttpHeader_Destroy(Pointer);
         }
 
@@ -33,7 +38,7 @@ namespace CronetSharp
             get => Cronet.HttpHeader.Cronet_HttpHeader_name_get(Pointer);
             set => Cronet.HttpHeader.Cronet_HttpHeader_name_set(Pointer, value);
         }
-        
+
         public string Value
         {
             get => Cronet.HttpHeader.Cronet_HttpHeader_value_get(Pointer);

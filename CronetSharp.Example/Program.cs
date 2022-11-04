@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using CronetSharp;
-using CronetSharp.Cronet.Asm;
+using CronetSharp.Cronet.Bin;
 using example.Examples;
 
 namespace example
@@ -14,7 +14,7 @@ namespace example
             // load dll
             var loader = new CronetLoader();
             loader.Load();
-            
+
             // MultiThreadingExample.Run();
 
             // create & start cronet engine
@@ -24,10 +24,10 @@ namespace example
             // run random example
             bool testProxy = false;
             var examples = new List<IExample>() {new GetRequestExample(), new PostRequestExample()};
-            if (testProxy) 
+            if (testProxy)
                 examples.Add(new ProxyRequestExample(new Proxy("127.0.0.1", 8888)));
             var example = examples.ElementAt(new Random().Next(0, examples.Count));
-            
+
             example.Run(engine);
 
             Console.ReadKey();
