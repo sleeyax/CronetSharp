@@ -6,7 +6,7 @@ namespace CronetSharp
     public class ByteBufferCallback : IDisposable
     {
         public IntPtr Pointer { get; }
-        
+
         public ByteBufferCallback(Action<ByteBuffer> onDestroy)
         {
             Cronet.BufferCallback.OnDestroyFunc onDestroyFunc = (bufferCallbackPtr, bufferPtr) => onDestroy(new ByteBuffer(bufferPtr));
@@ -22,6 +22,11 @@ namespace CronetSharp
 
         public void Dispose()
         {
+            if (Pointer == IntPtr.Zero)
+            {
+                return;
+            }
+
             Cronet.BufferCallback.Cronet_BufferCallback_Destroy(Pointer);
             GCManager.Free(Pointer);
         }

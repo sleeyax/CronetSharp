@@ -13,14 +13,19 @@ namespace CronetSharp
             Pointer = Cronet.Runnable.Cronet_Runnable_CreateWith(runFunc);
             GCManager.Register(Pointer, handle);
         }
-        
+
         public Runnable(IntPtr pointer)
         {
             Pointer = pointer;
         }
-        
+
         public void Dispose()
         {
+            if (Pointer == IntPtr.Zero)
+            {
+                return;
+            }
+
             Cronet.Runnable.Cronet_Runnable_Destroy(Pointer);
             GCManager.Free(Pointer);
         }

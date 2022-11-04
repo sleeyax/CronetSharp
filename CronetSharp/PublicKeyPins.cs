@@ -6,7 +6,7 @@ namespace CronetSharp
     public class PublicKeyPins : IDisposable
     {
         public IntPtr Pointer { get; }
-        
+
         public PublicKeyPins()
         {
             Pointer = Cronet.PublicKeyPins.Cronet_PublicKeyPins_Create();
@@ -16,7 +16,7 @@ namespace CronetSharp
         {
             Pointer = publicKeyPinsPointer;
         }
-        
+
         public PublicKeyPins(string hostname, string[] pinsSha256, bool includeSubdomains, DateTime expirationDate)
         {
             Pointer = Cronet.PublicKeyPins.Cronet_PublicKeyPins_Create();
@@ -25,7 +25,7 @@ namespace CronetSharp
             IncludeSubdomains = includeSubdomains;
             ExpirationDate = (long) (expirationDate - new DateTime(1970, 1, 1)).TotalSeconds;
         }
-        
+
         public PublicKeyPins(string hostname, string[] pinsSha256)
         {
             Pointer = Cronet.PublicKeyPins.Cronet_PublicKeyPins_Create();
@@ -35,6 +35,11 @@ namespace CronetSharp
 
         public void Dispose()
         {
+            if (Pointer == IntPtr.Zero)
+            {
+                return;
+            }
+
             Cronet.PublicKeyPins.Cronet_PublicKeyPins_Destroy(Pointer);
         }
 
@@ -65,7 +70,7 @@ namespace CronetSharp
         public string[] Pins
         {
             get
-            { 
+            {
                 var size = Cronet.PublicKeyPins.Cronet_PublicKeyPins_pins_sha256_size(Pointer);
                 var pins = new string[size];
                 for (uint i = 0; i < size; i++)
@@ -80,9 +85,9 @@ namespace CronetSharp
                 foreach (var pin in value)
                     AddPin(pin);
             }
-            
+
         }
-        
+
         /// <summary>
         /// Add a single SHA256 pin.
         /// </summary>

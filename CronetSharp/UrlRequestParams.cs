@@ -18,12 +18,18 @@ namespace CronetSharp
 
         public void Dispose()
         {
-            Cronet.UrlRequestParams.Cronet_UrlRequestParams_Destroy(Pointer);
             ClearHeaders();
             UploadDataProvider?.Dispose();
             UploadDataProviderExecutor?.Dispose();
             RequestFinishedInfoListener?.Dispose();
             RequestFinishedInfoListenerExecutor?.Dispose();
+
+            if (Pointer == IntPtr.Zero)
+            {
+                return;
+            }
+
+            Cronet.UrlRequestParams.Cronet_UrlRequestParams_Destroy(Pointer);
         }
 
         public void AddHeader(string header, string value)
@@ -83,7 +89,7 @@ namespace CronetSharp
             get => Cronet.UrlRequestParams.Cronet_UrlRequestParams_http_method_get(Pointer);
             set => Cronet.UrlRequestParams.Cronet_UrlRequestParams_http_method_set(Pointer, value);
         }
-        
+
         public Proxy Proxy
         {
             get => Proxy.TryParse(Cronet.UrlRequestParams.Cronet_UrlRequestParams_proxy_get(Pointer));
@@ -107,7 +113,7 @@ namespace CronetSharp
             get => new UploadDataProvider(Cronet.UrlRequestParams.Cronet_UrlRequestParams_upload_data_provider_get(Pointer));
             set => Cronet.UrlRequestParams.Cronet_UrlRequestParams_upload_data_provider_set(Pointer, value.Pointer);
         }
-        
+
         /// <summary>
         /// Sets upload data provider engine.
         /// </summary>
@@ -149,6 +155,11 @@ namespace CronetSharp
         /// </summary>
         public void ClearHeaders()
         {
+            if (Pointer == IntPtr.Zero)
+            {
+                return;
+            }
+
             Cronet.UrlRequestParams.Cronet_UrlRequestParams_request_headers_clear(Pointer);
         }
     }

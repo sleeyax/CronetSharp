@@ -21,6 +21,11 @@ namespace CronetSharp
 
         public void Dispose()
         {
+            if (Pointer == IntPtr.Zero)
+            {
+                return;
+            }
+
             Cronet.RequestFinishedInfoListener.Cronet_RequestFinishedInfoListener_Destroy(Pointer);
             GCManager.Free(Pointer);
         }

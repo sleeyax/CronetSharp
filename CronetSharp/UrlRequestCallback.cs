@@ -6,7 +6,7 @@ namespace CronetSharp
     public class UrlRequestCallback : IDisposable
     {
         public IntPtr Pointer { get; }
-        
+
         /// <summary>
         /// Invoked whenever a redirect is encountered.
         /// </summary>
@@ -31,7 +31,7 @@ namespace CronetSharp
         /// Invoked if request was canceled via cancel().
         /// </summary>
         public Action<UrlRequest, UrlResponseInfo> OnCancelled;
-        
+
         public UrlRequestCallback()
         {
             Cronet.UrlRequestCallback.OnRedirectReceivedFunc onRedirectReceivedFunc = (urlRequestCallbackPtr, urlRequestPtr, urlResponseInfoPtr, newLocationUrl) => OnRedirectReceived(new UrlRequest(urlRequestPtr), new UrlResponseInfo(urlResponseInfoPtr), newLocationUrl);
@@ -50,21 +50,26 @@ namespace CronetSharp
                 onFailedFunc,
                 onCanceledFunc
             }.Select(GCManager.Alloc);
-            
+
             Pointer = Cronet.UrlRequestCallback.Cronet_UrlRequestCallback_CreateWith(
-                onRedirectReceivedFunc, 
-                onResponseStartedFunc, 
+                onRedirectReceivedFunc,
+                onResponseStartedFunc,
                 onReadCompletedFunc,
                 onSucceededFunc,
                 onFailedFunc,
                 onCanceledFunc
             );
-            
+
             GCManager.Register(Pointer, handles.ToArray());
         }
 
         public void Dispose()
         {
+            if (Pointer == IntPtr.Zero)
+            {
+                return;
+            }
+
             Cronet.UrlRequestCallback.Cronet_UrlRequestCallback_Destroy(Pointer);
             GCManager.Free(Pointer);
         }
