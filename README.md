@@ -1,3 +1,5 @@
+> This project is considered 'complete' and is therefore no longer maintained. Contact me if you want to unarchive this project for whatever reason. Click [here](https://github.com/sleeyax/cronet-rs) for an implementation in Rust :)
+ 
  # CronetSharp
  C# bindings and library to interact with the cronet (Chromium Network Stack) native C API.
  
